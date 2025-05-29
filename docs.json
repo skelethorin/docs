@@ -58,6 +58,11 @@
     "global": {
       "anchors": [
         {
+          "anchor": "Website",
+          "href": "https://krews.xyz/",
+          "icon": "earth-africa"
+        },
+        {
           "anchor": "Twitter",
           "href": "https://x.com/Krewstake",
           "icon": "bird"
