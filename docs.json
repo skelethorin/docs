@@ -77,7 +77,7 @@
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Website",
+      "label": "Snapshots",
       "href": "https://krews.xyz/snapshots"
     }
   },
