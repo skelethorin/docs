@@ -22,6 +22,12 @@
             ]
           },
           {
+            "group": "Node Installations",
+            "pages": [
+              "node-installation/avail"
+            ]
+          },
+          {
             "group": "Essentials",
             "pages": [
               "essentials/markdown",
