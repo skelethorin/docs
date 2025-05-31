@@ -24,7 +24,8 @@
           {
             "group": "Node Installations",
             "pages": [
-              "node-installation/avail"
+              "node-installation/avail",
+              "node-installation/bevm"
             ]
           },
           {
