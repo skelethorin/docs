@@ -22,7 +22,7 @@
             ]
           },
           {
-            "group": "Node Installations",
+            "group": "Networks",
             "pages": [
               "node-installation/avail",
               "node-installation/bevm",
