@@ -1,7 +1,37 @@
 ---
 title: "Avail"
-description: "Avail DA is the essential next step in a three phase plan to provide an infrastructure layer to accelerate the unification of web3. Nexus is second, addressing cross chain composability and responsive."
+description: "Avail is a Substrate-based, modular data-availability layer designed to provide scalable, decentralized data storage for downstream blockchains. By separating settlement from data-availability, Avail enables developers to deploy rollups, DA chains, and other layer-2 systems with minimal overhead. As a validator service, Krews operates high-performance nodes on the Avail network, ensuring reliable block production, robust finality, and continuous uptime for our delegators."
 ---
 
-Snapshot: [https://krews.xyz/snapshots/avail](https://krews.xyz/snapshots/avail\\)\
-RPC: https://avail-rpc.krews.xyz
+[Website](https://www.availproject.org/) <Icon icon="arrow-up-right" />| [Twitter](https://x.com/AvailProject) <Icon icon="arrow-up-right" /> | [Github](https://github.com/availproject) <Icon icon="arrow-up-right" /> | [Resource](https://blog.availproject.org/) <Icon icon="arrow-up-right" />
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What wallets are supported for Avail?">
+    Any wallet that supports Substrate-based networks and has Avail configuration will work. Common options include Talisman, Polkawallet, SubWallet, or Polkadot{.js} (configured for Avail).
+  </Accordion>
+  <Accordion title="Is there a fee?">
+    Yes. Krews charges a 10% commission on staking rewards. The APR displayed on your dashboard reflects the network’s gross yield before deducting Krews’s commission.
+  </Accordion>
+  <Accordion title="What is the unbonding period?">
+    Avail enforces a 28-day unbonding period. When you decide to unstake, your AVAIL tokens enter a 28-day lockup during which they do not earn rewards and cannot be transferred. After 28 days, you are free to withdraw or redelegate.
+  </Accordion>
+  <Accordion title="How do I stake with Krews on Avail?">
+    1. Install and configure a compatible wallet (e.g., Talisman) with Avail’s network endpoint.
+    2. Transfer AVAIL tokens into your staking account.
+    3. Visit the Avail Staking Dashboard (e.g., https://staking.avail.tools).
+    4. Connect your wallet and search for “Krews Validator” under the validator list.
+    5. Submit a nomination (bond) transaction to delegate your AVAIL to Krews.
+    6. Once the next era is reached, your stake becomes active, and you start earning rewards (minus our 5 % commission). |\
+       | **How can I claim and restake rewards?** | You may claim rewards manually via the Staking Dashboard by clicking “Withdraw Rewards” under your account’s staking page. To compound your yield, use the “Bond Extra” function to re-delegate the claimed AVAIL in a single transaction. Krews does not currently offer an auto-restake (REstake) service on Avail; all restaking must be performed manually. |
+
+       <Note>
+         Always ensure you have enough AVAIL in your wallet to cover transaction fees. If you plan to withdraw or redelegate, account for the 28-day unbonding lock-up period before your funds become available again.
+       </Note>
+  </Accordion>
+</AccordionGroup>
+
+| Snapshot | https://krews.xyz/snapshots/avail\\ |
+| -------- | ----------------------------------- |
+| RPC      | https://avail-rpc.krews.xyz         |
