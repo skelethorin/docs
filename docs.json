@@ -28,7 +28,7 @@
               "node-installation/bevm",
               "node-installation/warden"
             ]
-          },
+          }
         ]
       },
       {
