@@ -3,7 +3,45 @@ title: "Warden Protocol"
 description: "Next-gen Modular L1 Blockchain Infrastructure for Omnichain Applications"
 ---
 
-[Website](https://x.com/wardenprotocol) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/wardenprotocol) <Icon icon="arrow-up-right" /> | [Github](https://github.com/warden-protocol) <Icon icon="arrow-up-right" /> | [Resources](https://wardenprotocol.org/blog) <Icon icon="arrow-up-right" />
+[Website](https://wardenprotocol.org/) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/wardenprotocol) <Icon icon="arrow-up-right" /> | [Github](https://github.com/warden-protocol) <Icon icon="arrow-up-right" /> | [Resources](https://wardenprotocol.org/blog) <Icon icon="arrow-up-right" />
 
-API: https://warden-api.krews.xyz \
-RPC: https://warden-rpc.krews.xyz
+<CodeGroup>
+
+```API
+https://warden-api.krews.xyz 
+```
+
+
+```RPC
+https://warden-rpc.krews.xyz
+```
+
+</CodeGroup>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What wallets are supported for Warden Protocol?">
+    You can stake and interact with Warden using any Ethereum‑compatible wallet that integrates with SpaceWard or the Warden App (e.g., MetaMask via dApp interfaces). For node operation, CLI or SDK tools are available via GitHub.
+  </Accordion>
+  <Accordion title="Is there a fee?">
+    Yes. Krews charges a 10% commission on staking rewards earned through validator operations on Warden Protocol. Your staking returns displayed in SpaceWard reflect the gross yield before deducting this commission.
+  </Accordion>
+  <Accordion title="What is the unbonding period?">
+    When you unstake or redelegate WARD, there is a **21-day unbonding period** during which your tokens neither earn rewards nor can be transferred :contentReference[oaicite:1]index=1.
+  </Accordion>
+  <Accordion title="How do I stake with Krews on Warden Protocol?">
+    1. Connect your wallet (e.g., MetaMask) to SpaceWard or the Warden App.
+    2. Stake WARD tokens by choosing Krews Validator in the staking interface.
+    3. Confirm the transaction.
+    4. Begin earning daily rewards.
+    5. Reward payouts are subject to a 10% commission retained by Krews.
+  </Accordion>
+  <Accordion title="How can I claim and restake rewards?">
+    Rewards accumulate daily and can be claimed manually through SpaceWard or the Warden App. You can then manually restake your claimed WARD via the "Stake More" function. Krews does not currently offer an auto-compound feature.
+
+    <Note>
+      Always ensure your wallet has enough ETH or WARD to cover gas fees when claiming or restaking.
+    </Note>
+  </Accordion>
+</AccordionGroup>
