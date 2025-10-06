@@ -41,12 +41,14 @@
               {
                 "group": "Warden",
                 "pages": [
+                  "networks/warden",
                   "node-installation/warden"
                 ]
               },
               {
                 "group": "Aligned",
                 "pages": [
+                  "networks/aligned",
                   "node-installation/aligned"
                 ]
               }
