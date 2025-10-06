@@ -24,11 +24,19 @@
           {
             "group": "Networks",
             "pages": [
-              "node-installation/avail",
+              {
+                "group": "Avail",
+                "pages": [
+                  "node-installation/avail",
+                  "node-installation/avail-config",
+                  "node-installation/avail-monitoring"
+                ]
+              },
               "node-installation/warden",
               "node-installation/aligned"
             ]
           }
+
         ]
       },
       {
