@@ -24,12 +24,13 @@
           {
             "group": "Networks",
             "pages": [
-              {
-                "group": "Avail",
-                "pages": [
-                  "node-installation/node-installation"
-                ]
-              },
+                  {
+                    "group": "Avail",
+                    "pages": [
+                      "node-installation/avail",
+                      "node-installation/installation-guide"
+                    ]
+                  },
               "node-installation/warden",
               "node-installation/aligned",
               "node-installation/celestia"
