@@ -24,19 +24,34 @@
           {
             "group": "Networks",
             "pages": [
-                  {
-                    "group": "Avail",
-                    "pages": [
-                      "node-installation/avail",
-                      "node-installation/installation-guide"
-                    ]
-                  },
-              "node-installation/warden",
-              "node-installation/aligned",
-              "node-installation/celestia"
+              {
+                "group": "Celestia",
+                "pages": [
+                  "networks/celestia",
+                  "node-installation/celestia"
+                ]
+              },
+              {
+                "group": "Avail",
+                "pages": [
+                  "networks/avail",
+                  "node-installation/avail"
+                ]
+              },
+              {
+                "group": "Warden",
+                "pages": [
+                  "node-installation/warden"
+                ]
+              },
+              {
+                "group": "Aligned",
+                "pages": [
+                  "node-installation/aligned"
+                ]
+              }
             ]
           }
-
         ]
       },
       {
