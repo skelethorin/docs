@@ -16,9 +16,7 @@
           {
             "group": "Krews",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "index"
             ]
           },
           {
