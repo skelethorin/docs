@@ -5,8 +5,9 @@ description: "Run a Celestia (mocha-4 testnet) full node with systemd. Includes 
 
 [Official Documentation](https://docs.celestia.org/nodes/overview/) Recommended Hardware: 4 Cores, 8GB RAM, 250GB of storage (NVME)
 
+### Install go, if needed
+
 ```shellscript
-# install go, if needed
 cd $HOME
 VER="1.24.1"
 wget "https://golang.org/dl/go$VER.linux-amd64.tar.gz"
@@ -17,15 +18,21 @@ rm "go$VER.linux-amd64.tar.gz"
 echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bash_profile
 source $HOME/.bash_profile
 [ ! -d ~/go/bin ] && mkdir -p ~/go/bin
+```
 
-# set vars
+### Set vars
+
+```shellscript
 echo "export WALLET="wallet"" >> $HOME/.bash_profile
 echo "export MONIKER="test"" >> $HOME/.bash_profile
 echo "export CELESTIA_CHAIN_ID="mocha-4"" >> $HOME/.bash_profile
 echo "export CELESTIA_PORT="11"" >> $HOME/.bash_profile
 source $HOME/.bash_profile
+```
 
-# download binary
+### Download binary
+
+```shellscript
 cd $HOME 
 rm -rf celestia-app 
 git clone https://github.com/celestiaorg/celestia-app.git 
@@ -33,25 +40,37 @@ cd celestia-app/
 APP_VERSION=v6.0.5-mocha
 git checkout tags/$APP_VERSION -b $APP_VERSION 
 make install
+```
 
-# config and init app
+### Config and init app
+
+```shellscript
 celestia-appd config node tcp://localhost:${CELESTIA_PORT}657
 celestia-appd config keyring-backend os
 celestia-appd config chain-id mocha-4
 celestia-appd init $MONIKER --chain-id mocha-4
 celestia-appd download-genesis mocha-4
+```
 
-# download genesis and addrbook
+### Download genesis and addrbook
+
+```shellscript
 wget -O $HOME/.celestia-app/config/genesis.json https://server-6.itrocket.net/testnet/celestia/genesis.json
 wget -O $HOME/.celestia-app/config/addrbook.json  https://server-6.itrocket.net/testnet/celestia/addrbook.json
+```
 
-# set seeds and peers
+### Set seeds and peers
+
+```shellscript
 SEEDS="b402fe40f3474e9e208840702e1b7aa37f2edc4b@celestia-testnet-seed.itrocket.net:14656"
 PEERS="daf2cecee2bd7f1b3bf94839f993f807c6b15fbf@celestia-testnet-peer.itrocket.net:11656,c17c0cbf05e98656fee5f60fad469fc528f6d6de@65.109.25.113:11656,5786e4780a8d12f89d6263bb31ac58cf4f8331a3@195.224.80.26:36656,5318579c8b99a9c063c145bdb2fcdd58e74b4448@65.108.228.199:10156,609bb3c8a48ea6006d8f2859d9871a620a4fadf4@185.252.220.86:26756,7c841f59c35d70d9f1472d7d2a76a11eefb7f51f@136.243.69.100:43656,96b2761729cea90ee7c61206433fc0ba40c245bf@57.128.141.126:11656,43e9da043318a4ea0141259c17fcb06ecff816af@164.132.247.253:43656,ef1853155735bbdc15be6d04d61ea8e0b0f3429d@[2001:41d0:203:e4db::3]:26656,5a7566aa030f7e5e7114dc9764f944b2b1324bcd@65.109.23.114:11656,3e30bcfc55e7d351f18144aab4b0973e9e9bf987@65.108.226.183:11656,fb5e0b9efacc11916c58bbcd3606cbaa7d43c99f@65.108.234.84:28656"
 sed -i -e "/^\[p2p\]/,/^\[/{s/^[[:space:]]*seeds *=.*/seeds = \"$SEEDS\"/}" \
        -e "/^\[p2p\]/,/^\[/{s/^[[:space:]]*persistent_peers *=.*/persistent_peers = \"$PEERS\"/}" $HOME/.celestia-app/config/config.toml
+```
 
-# set custom ports in app.toml
+### Set custom ports in app.toml
+
+```shellscript
 sed -i.bak -e "s%:1317%:${CELESTIA_PORT}317%g;
 s%:8080%:${CELESTIA_PORT}080%g;
 s%:9090%:${CELESTIA_PORT}090%g;
@@ -59,26 +78,38 @@ s%:9091%:${CELESTIA_PORT}091%g;
 s%:8545%:${CELESTIA_PORT}545%g;
 s%:8546%:${CELESTIA_PORT}546%g;
 s%:6065%:${CELESTIA_PORT}065%g" $HOME/.celestia-app/config/app.toml
+```
 
-# set custom ports in config.toml file
+### Set custom ports in config.toml file
+
+```shellscript
 sed -i.bak -e "s%:26658%:${CELESTIA_PORT}658%g;
 s%:26657%:${CELESTIA_PORT}657%g;
 s%:6060%:${CELESTIA_PORT}060%g;
 s%:26656%:${CELESTIA_PORT}656%g;
 s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${CELESTIA_PORT}656\"%;
 s%:26660%:${CELESTIA_PORT}660%g" $HOME/.celestia-app/config/config.toml
+```
 
-# config pruning
+### Config pruning
+
+```shellscript
 sed -i -e "s/^pruning *=.*/pruning = \"custom\"/" $HOME/.celestia-app/config/app.toml 
 sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"100\"/" $HOME/.celestia-app/config/app.toml
 sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"19\"/" $HOME/.celestia-app/config/app.toml
+```
 
-# set minimum gas price, enable prometheus and disable indexing
+### Set minimum gas price, enable prometheus and disable indexing
+
+```shellscript
 sed -i 's|minimum-gas-prices =.*|minimum-gas-prices = "0.002utia"|g' $HOME/.celestia-app/config/app.toml
 sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.celestia-app/config/config.toml
 sed -i -e "s/^indexer *=.*/indexer = \"null\"/" $HOME/.celestia-app/config/config.toml
+```
 
-# create service file
+### Create service file
+
+```shellscript
 sudo tee /etc/systemd/system/celestia-appd.service > /dev/null <<EOF
 [Unit]
 Description=Celestia node
@@ -93,16 +124,22 @@ LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
 EOF
+```
 
-# reset and download snapshot
+### Reset and download snapshot
+
+```shellscript
 celestia-appd tendermint unsafe-reset-all --home $HOME/.celestia-app
 if curl -s --head curl https://server-6.itrocket.net/testnet/celestia/celestia_2025-10-06_8298568_snap.tar.lz4 | head -n 1 | grep "200" > /dev/null; then
   curl https://server-6.itrocket.net/testnet/celestia/celestia_2025-10-06_8298568_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.celestia-app
     else
   echo "no snapshot found"
 fi
+```
 
-# enable and start service
+### Enable and start service
+
+```shellscript
 sudo systemctl daemon-reload
 sudo systemctl enable celestia-appd
 sudo systemctl restart celestia-appd && sudo journalctl -u celestia-appd -fo cat
