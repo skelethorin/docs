@@ -27,13 +27,12 @@
               {
                 "group": "Avail",
                 "pages": [
-                  "node-installation/avail",
-                  "node-installation/avail-config",
-                  "node-installation/avail-monitoring"
+                  "node-installation/node-installation"
                 ]
               },
               "node-installation/warden",
-              "node-installation/aligned"
+              "node-installation/aligned",
+              "node-installation/celestia"
             ]
           }
 
