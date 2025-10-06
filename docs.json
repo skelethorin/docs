@@ -24,9 +24,20 @@
             "pages": [
               {
                 "group": "Celestia",
-                "pages": [
+                "pages": [               
                   "networks/celestia",
-                  "node-installation/celestia"
+                  {
+                    "group": "Mainnet",
+                    "pages": [
+                      "node-installation-mainnet/celestia"
+                    ]
+                  },                   
+                  {
+                    "group": "Testnet",
+                    "pages": [
+                      "node-installation-testnet/celestia"
+                    ]
+                  }
                 ]
               },
               {
