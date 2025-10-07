@@ -47,6 +47,13 @@
                   "node-installation/avail"
                 ]
               },
+                            {
+                "group": "Story",
+                "pages": [
+                  "networks/story",
+                  "node-installation/story"
+                ]
+              },
               {
                 "group": "Warden",
                 "pages": [

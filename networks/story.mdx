@@ -1,0 +1,40 @@
+---
+title: "Overview"
+description: "Story Protocol is a modular, EVM-first blockchain focused on programmable intellectual property (IP). By separating execution from staking with Cosmos-style modules, Story lets creators register IP on-chain, set licensing terms, and monetize usage while validators secure the network. As a validator service, Krews runs high-availability infrastructure on Story to deliver reliable performance and continuous uptime for our delegators."
+sidebarTitle: "Overview"
+---
+
+[Website](https://www.story.foundation/) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/storyprotocol) <Icon icon="arrow-up-right" /> | [Github](https://github.com/storyprotocol) <Icon icon="arrow-up-right" /> | [Resources](https://docs.story.foundation/) <Icon icon="arrow-up-right" />
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What wallets are supported for Story?">
+    Story is EVM-compatible. Any modern EVM wallet works via WalletConnect—common choices include MetaMask, Rabby, Rainbow, and Coinbase Wallet. Hardware wallets (e.g., Ledger) can be used through these wallets’ EVM integrations. If your wallet needs network parameters, add Story from Chainlist or the official docs.
+  </Accordion>
+
+  <Accordion title="Is there a fee?">
+    Yes. Krews charges a 10% commission on staking rewards. The APR you see on dashboards reflects the network’s gross yield before deducting Krews’s commission.
+  </Accordion>
+
+  <Accordion title="What is the unbonding period?">
+    Story uses a **14-day unbonding period**. After you initiate unstake, tokens wait ~14 days without accruing rewards. Once unbonded, withdrawals are processed through a queue (processed in batches each block). When your request is executed, you can withdraw the tokens to your wallet.
+  </Accordion>
+
+  <Accordion title="How do I stake with Krews on Story?">
+    1. Connect an EVM wallet (e.g., MetaMask).  
+    2. Acquire IP tokens and fund the wallet with a small amount for fees.  
+    3. Open the official **Story Staking Dashboard**: https://staking.story.foundation/  
+    4. Find “Krews” in the validator list and open the validator page.  
+    5. Choose your staking type (flexible or fixed, if available for your token type) and amount.  
+    6. Confirm the transaction in your wallet. Rewards start accruing after your stake is active.
+  </Accordion>
+
+  <Accordion title="How can I claim and restake rewards?">
+    Claim rewards from the Staking Dashboard when available under your account/validator position. To compound, delegate claimed IP back to Krews in a new stake transaction. If you plan to unstake, remember the **14-day unbonding** applies before you can withdraw.
+
+    <Note>
+      Keep a small IP balance for network fees. Some fixed-term staking options restrict unstaking until the term ends; flexible staking can be unstaked anytime but still observes the 14-day unbonding before withdrawal.
+    </Note>
+  </Accordion>
+</AccordionGroup>
