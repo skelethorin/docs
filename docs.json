@@ -42,11 +42,22 @@
               },
               {
                 "group": "Story",
-                "pages": [
+                "pages": [               
                   "networks/story",
-                  "node-installation/story"
+                  {
+                    "group": "Mainnet",
+                    "pages": [
+                      "node-installation-mainnet/story"
+                    ]
+                  },                   
+                  {
+                    "group": "Testnet",
+                    "pages": [
+                      "node-installation-testnet/story"
+                    ]
+                  }
                 ]
-              },              
+              },             
               {
                 "group": "Avail",
                 "pages": [
