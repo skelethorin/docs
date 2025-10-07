@@ -41,17 +41,17 @@
                 ]
               },
               {
-                "group": "Avail",
-                "pages": [
-                  "networks/avail",
-                  "node-installation/avail"
-                ]
-              },
-                            {
                 "group": "Story",
                 "pages": [
                   "networks/story",
                   "node-installation/story"
+                ]
+              },              
+              {
+                "group": "Avail",
+                "pages": [
+                  "networks/avail",
+                  "node-installation/avail"
                 ]
               },
               {
