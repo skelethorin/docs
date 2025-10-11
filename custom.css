@@ -5,3 +5,7 @@ body {
 p {
   font-size: 16px !important;
 }
+
+button img {
+  border-radius: 10px
+}
