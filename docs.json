@@ -24,6 +24,7 @@
             "pages": [
               {
                 "group": "Celestia",
+                "icon": "https://cloudflare-snapshots.krews.xyz/celestia.png",
                 "pages": [               
                   "networks/celestia",
                   {
@@ -42,6 +43,7 @@
               },
               {
                 "group": "Story",
+                "icon": "https://cloudflare-snapshots.krews.xyz/story.png",
                 "pages": [               
                   "networks/story",
                   {
