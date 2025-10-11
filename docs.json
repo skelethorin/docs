@@ -62,6 +62,7 @@
               },             
               {
                 "group": "Avail",
+                "icon": "https://cloudflare-snapshots.krews.xyz/avail.png",
                 "pages": [
                   "networks/avail",
                   "node-installation/avail"
@@ -76,6 +77,7 @@
               },
               {
                 "group": "Aligned",
+                "icon": "https://cloudflare-snapshots.krews.xyz/aligned.png",
                 "pages": [
                   "networks/aligned",
                   "node-installation/aligned"
