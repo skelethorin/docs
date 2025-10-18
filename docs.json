@@ -69,13 +69,6 @@
                 ]
               },
               {
-                "group": "Warden",
-                "pages": [
-                  "networks/warden",
-                  "node-installation/warden"
-                ]
-              },
-              {
                 "group": "Aligned",
                 "icon": "https://cloudflare-snapshots.krews.xyz/aligned.png",
                 "pages": [
