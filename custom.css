@@ -9,3 +9,8 @@ p {
 button img {
   border-radius: 10px !important;
 }
+
+.rounded-card :where(img) {
+  border-radius: 12px;        /* ihtiyacına göre 50% de verebilirsin */
+  overflow: hidden;           /* bazı tarayıcılarda güvenli taraf */
+}
