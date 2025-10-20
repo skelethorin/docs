@@ -76,6 +76,14 @@
                   "networks/aligned",
                   "node-installation/aligned"
                 ]
+              },
+                            {
+                "group": "Espresso",
+                "icon": "https://cloudflare-snapshots.krews.xyz/espresso.png",
+                "pages": [
+                  "networks/espresso",
+                  "node-installation/espresso"
+                ]
               }
             ]
           }

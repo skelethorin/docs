@@ -1,0 +1,43 @@
+---
+title: "Overview"
+description: "Espresso is a global confirmation network and shared sequencer built for rollups. Powered by the HotShot BFT consensus, Espresso provides fast, credible confirmations and optional decentralized sequencing and data availability—letting rollups achieve stronger security and cross-chain composability without sacrificing UX. As a validator service, Krews operates high-performance Espresso nodes and participates in network decentralization efforts."
+sidebarTitle: "Overview"
+---
+
+[Website](https://www.espressosys.com/) <Icon icon="arrow-up-right" /> | [X (Twitter)](https://x.com/EspressoSys) <Icon icon="arrow-up-right" /> | [Docs](https://docs.espressosys.com/) <Icon icon="arrow-up-right" /> | [GitHub](https://github.com/EspressoSystems) <Icon icon="arrow-up-right" /> | [Discord](https://discord.com/invite/espresso) <Icon icon="arrow-up-right" />
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What is Espresso in one paragraph?">
+    Espresso is a global confirmation layer and shared sequencer for rollups. It uses the HotShot BFT consensus to deliver fast, credible confirmations so L2s know—within seconds—what state will eventually finalize on L1. Rollups can optionally use Espresso for decentralized sequencing and data availability, while keeping full compatibility with Ethereum and common rollup stacks.
+  </Accordion>
+  <Accordion title="Which wallets are supported?">
+    Espresso uses Ethereum addresses for operator and delegation interactions. For user-level interactions on integrated rollups and testnets, any Ethereum-compatible wallet (e.g., MetaMask) typically works. Exact wallet support depends on the specific rollup and network you connect to.
+  </Accordion>
+  <Accordion title="Does Espresso have staking and delegation?">
+    Yes—Espresso supports staking/delegation for node participation. Delegations are recorded via contracts on L1 and consumed by Espresso at epoch boundaries. Public delegation and UI/flows may vary by release. We’ll update this page with clear steps once public delegation is open to everyone.
+  </Accordion>
+  <Accordion title="What are the unbonding / withdrawal rules?">
+    Unbonding and withdrawal timing are release-specific and not finalized here. Until stable mainnet policies are public, we avoid quoting fixed periods. We’ll publish exact timelines and any lockups as soon as Espresso’s mainnet documentation confirms them.
+  </Accordion>
+  <Accordion title="How do I integrate a rollup with Espresso?">
+    Check the official docs for integration guides (Arbitrum Nitro, OP Stack, etc.). Espresso provides confirmations and optional decentralized sequencing/DA. Teams typically start with the integration quickstarts, run testnet nodes, then enable Espresso confirmations in their rollup stack.
+  </Accordion>
+  <Accordion title="How do I stake with (or delegate to) Krews on Espresso?">
+    When public delegation is available:
+
+    1. Ensure you have the supported wallet and the required token on the designated L1.
+    2. Register or locate the Krews node in the network’s registry.
+    3. Delegate using the recommended flow (CLI or UI) for the current release.
+    4. Your delegation becomes active according to Espresso’s epoch rules.
+
+    **Commission:** Krews charges a 10% commission on staking rewards when public delegation to our node is enabled on Espresso.
+  </Accordion>
+  <Accordion title="Is there an APR and auto-compound?">
+    APR depends on network economics and may change per release. Auto-compound support (if any) is determined by the staking contracts/UX available at that time. We’ll document compounding options once they’re officially provided.
+  </Accordion>
+  <Accordion title="Where can I test today?">
+    Espresso maintains persistent and named testnets (e.g., Decaf and earlier series). Refer to the Releases/Testnets section of the docs for the current endpoints and instructions.
+  </Accordion>
+</AccordionGroup>
