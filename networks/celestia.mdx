@@ -1,6 +1,6 @@
 ---
 title: "Overview"
-description: "Celestia is the first modular blockchain network that provides a dedicated data availability layer for scalable rollups and modular blockchains. By decoupling consensus and data availability from execution, Celestia enables developers to deploy their own sovereign rollups with minimal setup and security overhead. Krews operates highly available Celestia validators and RPC nodes, ensuring consistent block propagation, accurate validator performance metrics, and stable uptime for delegators."
+description: "Celestia is a modular blockchain network that provides a dedicated data availability (DA) layer for scalable rollups and modular blockchains. By separating consensus and data availability from execution, Celestia enables developers to deploy sovereign rollups with minimal setup and security overhead."
 'og:image': "https://s2.coinmarketcap.com/static/img/coins/64x64/22861.png"
 ---
 
@@ -10,35 +10,27 @@ description: "Celestia is the first modular blockchain network that provides a d
 
 <AccordionGroup>
   <Accordion title="What wallets are supported for Celestia?">
-    You can use wallets that support Cosmos SDK–based chains. Common options include **Keplr**, **Leap**, and **Cosmostation**.\
-    To interact with Celestia’s staking dashboard, connect one of these wallets to the [Celestia Staking Portal](https://staking.celestia.explorers.guru/).
+    Wallets commonly used with Cosmos SDK–based chains work with Celestia. Official guides cover **Keplr** and **Leap** (Gem is also documented). To delegate/stake, connect your wallet to a supported staking interface such as the Celestia explorers.guru portal. 
+    <br />
+    <small>See: wallet & staking docs and the validator portal.</small>
   </Accordion>
-  <Accordion title="Is there a fee?">
-    Yes. Krews charges a **20% commission** on staking rewards. The APR displayed on Celestia staking dashboards represents the network’s gross yield before commission deductions.
-  </Accordion>
-  <Accordion title="What is the unbonding period?">
-    Celestia enforces a **21-day unbonding period**.\
-    After submitting an unbond transaction, your **TIA tokens** remain locked and non-transferable for 21 days. Once this period ends, you can withdraw or redelegate your tokens freely.
-  </Accordion>
-  <Accordion title="How do I stake with Krews on Celestia?">
-    1. Install a Cosmos-compatible wallet (Keplr, Leap, or Cosmostation).
-    2. Deposit your **TIA tokens** to your wallet address.
-    3. Visit the [Celestia Staking Portal](https://staking.celestia.explorers.guru/validators).
-    4. Connect your wallet and search for **Krews Validator** in the validator list.
-    5. Click **Delegate** and enter the amount of TIA you wish to stake.
-    6. Confirm the transaction in your wallet.
-    7. Once the delegation is confirmed, you’ll start earning staking rewards in the next block cycles (minus Krews’s 10% commission).
-  </Accordion>
-  <Accordion title="How can I claim and restake rewards?">
-    Rewards can be claimed directly from your wallet or via the staking dashboard under **“Withdraw Rewards.”**\
-    To compound your yield, use the **“Delegate More”** or **“Restake”** option after claiming.
 
-    <Note>
-      Currently, Celestia does not support automatic compounding through REStake. All restaking actions must be performed manually via your wallet or the staking interface.\
-      Always ensure you have a small amount of **TIA** left unbonded to cover gas fees.
-    </Note>
+  <Accordion title="Are there fees or commissions?">
+    Transactions pay gas in **TIA**. Validator commissions are set by each validator and shown in staking dashboards; check the validator’s profile before delegating.
   </Accordion>
-  <Accordion title="What is the minimum delegation amount?">
-    There is **no fixed minimum** required by the network, but most dashboards enforce a small threshold (usually around **0.1 TIA**) to cover gas costs efficiently.
+
+  <Accordion title="What is the unbonding period?">
+    Celestia currently enforces a **21-day unbonding period**. During unbonding, TIA is locked and does not earn rewards. (An upgrade proposal/roadmap item targets ~14 days, but mainnet parameters today remain 21 days.)
+  </Accordion>
+
+  <Accordion title="How do I stake TIA?">
+    1) Install a supported wallet (e.g., Keplr or Leap).  
+    2) Fund your wallet with **TIA**.  
+    3) Open a staking portal (e.g., explorers.guru Celestia validators), pick a validator, and **Delegate**.  
+    4) Confirm in your wallet to start earning per protocol rules.
+  </Accordion>
+
+  <Accordion title="How do I claim and restake rewards (auto-compound)?">
+    Rewards can be claimed in your wallet or via the staking UI. Auto-compounding is **not automatic by default**, but many validators enable it via **REStake** using Cosmos **Authz**—you can opt-in and revoke at any time.
   </Accordion>
 </AccordionGroup>
