@@ -1,0 +1,30 @@
+---
+title: "Overview"
+description: "Aptos is a Layer-1 blockchain built with the Move language. It emphasizes safety and performance with features like parallel execution (Block-STM), low-latency confirmations, and a flexible fee model."
+sidebarTitle: "Overview"
+---
+
+[Website](https://aptosnetwork.com/) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/Aptos) <Icon icon="arrow-up-right" /> | [Github](https://github.com/aptos-labs) <Icon icon="arrow-up-right" /> | [Resources](https://aptos.dev/) <Icon icon="arrow-up-right" />
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What is Aptos?">
+    Aptos is a Layer-1, proof-of-stake blockchain that uses the Move programming language, designed for asset safety and expressive smart contracts. The network implements parallel execution (Block-STM) to improve throughput and latency.
+  </Accordion>
+  <Accordion title="What wallets are supported for Aptos?">
+    Aptos supports multiple Move-compatible wallets. Common options include **Petra** (by Aptos Labs) and third-party wallets such as **Martian** and **Pontem**. Dapps integrate wallets via the Aptos Wallet Adapter standard.
+  </Accordion>
+  <Accordion title="Is there a fee?">
+    Yes. Transactions pay gas in **APT**. Fees include execution/IO costs and storage fees; gas parameters are configurable via on-chain governance. Developers can specify gas price and limits; users typically just confirm in their wallet.
+  </Accordion>
+  <Accordion title="What is the unbonding (unlock) period?">
+    Aptos uses delegated staking. You can request to unlock at any time, but funds become **withdrawable only after the delegation pool’s lockup cycle ends**. The lockup duration is set by governance and can vary by pool/cycle; always check the pool’s current unlock date in the UI.
+  </Accordion>
+  <Accordion title="How do I stake or delegate APT?">
+    1. Install a supported wallet (e.g., Petra).
+    2. Open the official explorer or a partner interface that supports delegated staking.
+    3. Choose a validator / pool and delegate your APT.
+    4. Rewards accrue per protocol rules; when you unlock, you can withdraw after the pool’s lockup cycle ends.
+  </Accordion>
+</AccordionGroup>

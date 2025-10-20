@@ -70,6 +70,14 @@
                 ]
               },
               {
+                "group": "Aptos",
+                "icon": "https://cloudflare-snapshots.krews.xyz/aptos.png",
+                "pages": [
+                  "networks/aptos",
+                  "node-installation/aptos"
+                ]
+              },
+              {
                 "group": "Aligned",
                 "icon": "https://cloudflare-snapshots.krews.xyz/aligned.png",
                 "pages": [
@@ -77,7 +85,7 @@
                   "node-installation/aligned"
                 ]
               },
-                            {
+              {
                 "group": "Espresso",
                 "icon": "https://cloudflare-snapshots.krews.xyz/espresso.png",
                 "pages": [
