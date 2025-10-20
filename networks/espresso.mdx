@@ -1,33 +1,31 @@
 ---
 title: "Overview"
-description: "Espresso is a global confirmation network and shared sequencer for rollups. Using the HotShot BFT consensus, Espresso provides fast, credible confirmations and optional decentralized sequencing/DA, improving security and cross-chain composability for L2s. Krews is not currently a mainnet validator on Espresso; this page summarizes network concepts and official resources."
+description: "Espresso is a global confirmation network and shared sequencer for rollups. Using the HotShot BFT consensus, Espresso provides fast, credible confirmations and optional decentralized sequencing/DA—improving security and cross-chain composability for L2s."
 sidebarTitle: "Overview"
 ---
 
-[Website](https://www.espressosys.com/) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/EspressoSys) <Icon icon="arrow-up-right" /> | [Github](https://github.com/EspressoSystems) <Icon icon="arrow-up-right" /> | [Resources](https://medium.com/@espressosys) <Icon icon="arrow-up-right" />
+[Website](https://www.espressosys.com/) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/EspressoSys) <Icon icon="arrow-up-right" /> | [Github](https://github.com/EspressoSystems) <Icon icon="arrow-up-right" /> | [Resources](https://www.espressosys.com/resources) <Icon icon="arrow-up-right" />
 
 ## FAQ
 
 <AccordionGroup>
   <Accordion title="What wallets are supported for Espresso?">
-    Espresso integrates with rollups that typically use Ethereum-compatible wallets (e.g., MetaMask). Operator and integration flows may also interact with L1 contracts. Exact wallet support depends on each integrated rollup and release.
+    Wallet support depends on the integrated rollup and release. Most Espresso-enabled rollups use Ethereum-compatible wallets (e.g., MetaMask), but the exact choice is determined by each rollup’s stack and UI.
   </Accordion>
 
   <Accordion title="Is there a fee?">
-    Krews does **not** charge a commission here because we are **not** accepting delegations on Espresso. User gas costs (if any) are paid on the relevant chain(s). Espresso’s design includes L1 fee plumbing (e.g., a <code>fee_contract</code>) for sequencing fees defined by network configuration.
-    <Note>We’ll document any operator commissions only if/when public delegation to Krews becomes available on Espresso.</Note>
+    Users continue to pay gas on the chains they interact with. For builders/integrations, Espresso exposes a fee token contract on L1 to deposit ETH for HotShot data-processing fees; working balances are tracked by HotShot.
   </Accordion>
 
   <Accordion title="What is the unbonding period?">
-    As of <strong>Oct 20, 2025</strong>, Espresso mainnet is in a “Mainnet 0” phase with a fixed, preregistered operator set. Public staking/delegation for end-users is not broadly open; therefore a public unbonding period is not quoted here.
-    <Note>Parameters will be updated once the proof-of-stake release opens broader participation.</Note>
+    Espresso is currently in “Mainnet 0”, where only a fixed set of preregistered operators can run nodes; broad public staking/delegation parameters (including unbonding) are not publicly applicable yet.
   </Accordion>
 
-  <Accordion title="How do rollups use Espresso?">
-    Rollups can use Espresso’s global confirmation network for fast confirmations and (optionally) shared sequencing/DA. Start from the official docs’ integration guides (e.g., Nitro/OP Stack pages) and the “Build on Espresso” entries.
+  <Accordion title="Does Espresso support staking and delegation?">
+    Yes, by design the network transitions to proof-of-stake in later releases. During Mainnet 0, participation is permissioned; public delegation details will be provided with the PoS upgrade and accompanying docs.
   </Accordion>
 
-  <Accordion title="Where can I test or follow status?">
-    Espresso maintains a persistent testnet (Decaf) and lists current releases in the docs. Mainnet 0 is live (permissioned). Check the website/docs for testnet instructions and public endpoints as they evolve.
+  <Accordion title="How can I test or integrate a rollup with Espresso?">
+    Use the official docs. Espresso maintains a persistent testnet (Decaf) and provides integration guides (e.g., Arbitrum Nitro/Orbit, OP-stack). Start on testnet, then follow the release-specific mainnet instructions.
   </Accordion>
 </AccordionGroup>
