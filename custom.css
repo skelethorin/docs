@@ -14,3 +14,7 @@ button img {
   border-radius: 99px;        /* ihtiyacına göre 50% de verebilirsin */
   overflow: hidden;           /* bazı tarayıcılarda güvenli taraf */
 }
+
+.prose :where(a):not(:where([class~=not-prose],[class~=not-prose] *)) {
+  border-bottom: 1px solid rgb(var(--primary-light)/var(--tw-text-opacity))
+}
