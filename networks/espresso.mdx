@@ -4,24 +4,28 @@ description: "Espresso is a global confirmation network and shared sequencer for
 sidebarTitle: "Overview"
 ---
 
-[Website](https://www.espressosys.com/) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/EspressoSys) <Icon icon="arrow-up-right" /> | [Github](https://github.com/EspressoSystems) <Icon icon="arrow-up-right" /> | [Resources](https://medium.com/@espressosys) <Icon icon="arrow-up-right" />
+[Website](https://www.espressosys.com/) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/EspressoSys) <Icon icon="arrow-up-right" /> | [Github](https://github.com/EspressoSystems) <Icon icon="arrow-up-right" /> | [Resources](https://docs.espressosys.com/) <Icon icon="arrow-up-right" />
 
 ## FAQ
 
 <AccordionGroup>
   <Accordion title="What is Espresso?">
-    Espresso is a global confirmation layer and shared sequencer for rollups. It leverages the HotShot BFT consensus so rollup transactions can be credibly confirmed within seconds, giving chains early, secure certainty before L1 finality. :contentReference[oaicite:0]index=0
+    Espresso is a global confirmation layer and shared sequencer for rollups. It leverages the HotShot BFT consensus so rollup transactions can be credibly confirmed within seconds, providing early, shared certainty before L1 finality.
   </Accordion>
+
   <Accordion title="Is Espresso live on mainnet?">
-    Yes. Espresso is live as “Mainnet 0,” an initial production phase with a preregistered operator set and a roadmap toward broader proof-of-stake participation. Public end-user staking/delegation parameters (e.g., unbonding) are not broadly applicable until the PoS phase opens. :contentReference[oaicite:1]index=1
+    Yes. Espresso is live as “Mainnet 0,” a production phase with a preregistered operator set and a roadmap toward broader proof-of-stake participation.
   </Accordion>
+
   <Accordion title="What wallets are supported?">
-    Wallet choice depends on the integrated rollup and UI. Most Espresso-enabled rollups use Ethereum-compatible wallets (e.g., MetaMask), while operator/integration flows may interact with L1 contracts. :contentReference[oaicite:2]index=2
+    Wallets depend on the integrated rollup and release. Most Espresso-enabled rollups use Ethereum-compatible wallets (e.g., MetaMask); operator/integration flows may also interact with L1 contracts.
   </Accordion>
+
   <Accordion title="How are fees handled?">
-    Espresso exposes an L1 fee-token contract so builders can deposit ETH to pay HotShot data-processing fees; HotShot tracks working balances. (Withdrawals are planned in a future release.) User gas costs otherwise follow the chains they interact with. :contentReference[oaicite:3]index=3
+    Builders deposit ETH into an L1 fee-token contract to pay HotShot data-processing fees; HotShot tracks working balances. Withdrawals are planned in a future release. Users otherwise pay gas on the chains they interact with.
   </Accordion>
+
   <Accordion title="How can I test or integrate a rollup with Espresso?">
-    Use the persistent **Decaf** testnet and the official integration guides. Espresso provides reference integrations for Arbitrum Nitro/Orbit and OP Stack to enable confirmations (and, over time, decentralized/shared sequencing and DA). :contentReference[oaicite:4]index=4
+    Use the persistent **Decaf** testnet and the official integration guides in the docs. Start on testnet, then follow release-specific mainnet instructions as they evolve.
   </Accordion>
 </AccordionGroup>

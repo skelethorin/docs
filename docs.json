@@ -92,6 +92,14 @@
                   "networks/espresso",
                   "node-installation/espresso"
                 ]
+              },
+              {
+                "group": "Dymension",
+                "icon": "https://cloudflare-snapshots.krews.xyz/dymension.png",
+                "pages": [
+                  "networks/dymension",
+                  "node-installation/dymension"
+                ]
               }
             ]
           }
