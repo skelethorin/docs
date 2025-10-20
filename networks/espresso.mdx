@@ -1,31 +1,31 @@
 ---
 title: "Overview"
-description: "Espresso is a global confirmation network and shared sequencer for rollups. Using the HotShot BFT consensus, Espresso provides fast, credible confirmations and optional decentralized sequencing/DA—improving security and cross-chain composability for L2s."
+description: "Espresso is a global confirmation network and shared sequencer for rollups. Using the HotShot BFT consensus, it provides fast, credible confirmations and optional decentralized sequencing/DA to improve security and cross-chain composability."
 sidebarTitle: "Overview"
 ---
 
-[Website](https://www.espressosys.com/) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/EspressoSys) <Icon icon="arrow-up-right" /> | [Github](https://github.com/EspressoSystems) <Icon icon="arrow-up-right" /> | [Resources](https://www.espressosys.com/resources) <Icon icon="arrow-up-right" />
+[Website](https://www.espressosys.com/) <Icon icon="arrow-up-right" /> | [Twitter](https://x.com/EspressoSys) <Icon icon="arrow-up-right" /> | [Github](https://github.com/EspressoSystems) <Icon icon="arrow-up-right" /> | [Resources](https://docs.espressosys.com/) <Icon icon="arrow-up-right" />
 
 ## FAQ
 
 <AccordionGroup>
-  <Accordion title="What wallets are supported for Espresso?">
-    Wallet support depends on the integrated rollup and release. Most Espresso-enabled rollups use Ethereum-compatible wallets (e.g., MetaMask), but the exact choice is determined by each rollup’s stack and UI.
+  <Accordion title="What is Espresso?">
+    Espresso is a global confirmation layer and shared sequencer for rollups. It leverages the HotShot BFT consensus so rollup transactions can be credibly confirmed within seconds, giving chains early, secure certainty before L1 finality. :contentReference[oaicite:0]{index=0}
   </Accordion>
 
-  <Accordion title="Is there a fee?">
-    Users continue to pay gas on the chains they interact with. For builders/integrations, Espresso exposes a fee token contract on L1 to deposit ETH for HotShot data-processing fees; working balances are tracked by HotShot.
+  <Accordion title="Is Espresso live on mainnet?">
+    Yes. Espresso is live as “Mainnet 0,” an initial production phase with a preregistered operator set and a roadmap toward broader proof-of-stake participation. Public end-user staking/delegation parameters (e.g., unbonding) are not broadly applicable until the PoS phase opens. :contentReference[oaicite:1]{index=1}
   </Accordion>
 
-  <Accordion title="What is the unbonding period?">
-    Espresso is currently in “Mainnet 0”, where only a fixed set of preregistered operators can run nodes; broad public staking/delegation parameters (including unbonding) are not publicly applicable yet.
+  <Accordion title="What wallets are supported?">
+    Wallet choice depends on the integrated rollup and UI. Most Espresso-enabled rollups use Ethereum-compatible wallets (e.g., MetaMask), while operator/integration flows may interact with L1 contracts. :contentReference[oaicite:2]{index=2}
   </Accordion>
 
-  <Accordion title="Does Espresso support staking and delegation?">
-    Yes, by design the network transitions to proof-of-stake in later releases. During Mainnet 0, participation is permissioned; public delegation details will be provided with the PoS upgrade and accompanying docs.
+  <Accordion title="How are fees handled?">
+    Espresso exposes an L1 fee-token contract so builders can deposit ETH to pay HotShot data-processing fees; HotShot tracks working balances. (Withdrawals are planned in a future release.) User gas costs otherwise follow the chains they interact with. :contentReference[oaicite:3]{index=3}
   </Accordion>
 
   <Accordion title="How can I test or integrate a rollup with Espresso?">
-    Use the official docs. Espresso maintains a persistent testnet (Decaf) and provides integration guides (e.g., Arbitrum Nitro/Orbit, OP-stack). Start on testnet, then follow the release-specific mainnet instructions.
+    Use the persistent **Decaf** testnet and the official integration guides. Espresso provides reference integrations for Arbitrum Nitro/Orbit and OP Stack to enable confirmations (and, over time, decentralized/shared sequencing and DA). :contentReference[oaicite:4]{index=4}
   </Accordion>
 </AccordionGroup>
