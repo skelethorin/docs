@@ -145,6 +145,11 @@
           "anchor": "Twitter",
           "href": "https://x.com/Krewstake",
           "icon": "bird"
+        },
+        {
+          "anchor": "Medium",
+          "href": "https://medium.com/krews",
+          "icon": "medium"
         }
       ]
     }
