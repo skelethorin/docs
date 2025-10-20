@@ -100,6 +100,14 @@
                   "networks/dymension",
                   "node-installation/dymension"
                 ]
+              },
+              {
+                "group": "Lava",
+                "icon": "https://cloudflare-snapshots.krews.xyz/lava.png",
+                "pages": [
+                  "networks/lava",
+                  "node-installation/lava"
+                ]
               }
             ]
           }
