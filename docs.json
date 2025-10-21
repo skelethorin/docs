@@ -66,7 +66,19 @@
                 "icon": "https://cloudflare-snapshots.krews.xyz/avail.png",
                 "pages": [
                   "networks/avail",
-                  "node-installation/avail"
+                  {
+                    "group": "Mainnet",
+                    "pages": [
+                      "node-installation-mainnet/avail",
+                      "upgrade-mainnet/avail"
+                    ]
+                  },                   
+                  {
+                    "group": "Testnet",
+                    "pages": [
+                      "node-installation-testnet/avail"
+                    ]
+                  }
                 ]
               },
               {
@@ -74,7 +86,19 @@
                 "icon": "https://cloudflare-snapshots.krews.xyz/aptos.png",
                 "pages": [
                   "networks/aptos",
-                  "node-installation/aptos"
+                  {
+                    "group": "Mainnet",
+                    "pages": [
+                      "node-installation-mainnet/aptos",
+                      "upgrade-mainnet/aptos"
+                    ]
+                  },                   
+                  {
+                    "group": "Testnet",
+                    "pages": [
+                      "node-installation-testnet/aptos"
+                    ]
+                  }
                 ]
               },
               {
@@ -82,7 +106,19 @@
                 "icon": "https://cloudflare-snapshots.krews.xyz/aligned.png",
                 "pages": [
                   "networks/aligned",
-                  "node-installation/aligned"
+                  {
+                    "group": "Mainnet",
+                    "pages": [
+                      "node-installation-mainnet/aligned",
+                      "upgrade-mainnet/aligned"
+                    ]
+                  },                   
+                  {
+                    "group": "Testnet",
+                    "pages": [
+                      "node-installation-testnet/aligned"
+                    ]
+                  }
                 ]
               },
               {
@@ -90,7 +126,19 @@
                 "icon": "https://cloudflare-snapshots.krews.xyz/espresso.png",
                 "pages": [
                   "networks/espresso",
-                  "node-installation/espresso"
+                  {
+                    "group": "Mainnet",
+                    "pages": [
+                      "node-installation-mainnet/espresso",
+                      "upgrade-mainnet/espresso"
+                    ]
+                  },                   
+                  {
+                    "group": "Testnet",
+                    "pages": [
+                      "node-installation-testnet/espresso"
+                    ]
+                  }
                 ]
               },
               {
@@ -98,7 +146,19 @@
                 "icon": "https://cloudflare-snapshots.krews.xyz/dymension.png",
                 "pages": [
                   "networks/dymension",
-                  "node-installation/dymension"
+                  {
+                    "group": "Mainnet",
+                    "pages": [
+                      "node-installation-mainnet/dymension",
+                      "upgrade-mainnet/dymension"
+                    ]
+                  },                   
+                  {
+                    "group": "Testnet",
+                    "pages": [
+                      "node-installation-testnet/dymension"
+                    ]
+                  }
                 ]
               },
               {
@@ -106,7 +166,19 @@
                 "icon": "https://cloudflare-snapshots.krews.xyz/lava.png",
                 "pages": [
                   "networks/lava",
-                  "node-installation/lava"
+                  {
+                    "group": "Mainnet",
+                    "pages": [
+                      "node-installation-mainnet/lava",
+                      "upgrade-mainnet/lava"
+                    ]
+                  },                   
+                  {
+                    "group": "Testnet",
+                    "pages": [
+                      "node-installation-testnet/lava"
+                    ]
+                  }
                 ]
               }
             ]
