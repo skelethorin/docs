@@ -1,0 +1,99 @@
+---
+title: "Installation"
+description: "How to run a Sunrise full consensus node (mainnet sunrise-1). Includes dependencies, genesis, peers, gas prices, and start options."
+---
+
+<Note>
+  This guide follows the official Sunrise documentation. Use mainnet values unless you intentionally target the testnet.
+</Note>
+
+## Quick facts
+
+- **Binary**: `sunrised`
+- **Chain ID (mainnet)**: `sunrise-1`
+- **Go toolchain**: 1.24.2 (min per docs)
+- **Recommended min gas price**: `0.025uusdrise` (protects from spam)
+- **Mainnet genesis**: `https://raw.githubusercontent.com/sunriselayer/network/main/sunrise-1/genesis.json`
+
+## Install & initialize
+
+<Steps>
+  <Step title="Install dependencies and Go">
+    Ubuntu 22.04 LTS is used in the official guide.
+
+    ```bash
+    # Install Go 1.24.x (example using tarball; or use your package manager)
+    wget https://go.dev/dl/go1.24.2.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.2.linux-amd64.tar.gz
+    echo 'export PATH=$PATH:/usr/local/go/bin' | tee -a ~/.profile
+    source ~/.profile
+    go version
+    ```
+  </Step>
+  <Step title="Build the sunrise binary">
+    ```bash
+    git clone https://github.com/sunriselayer/sunrise.git
+    cd sunrise
+    git checkout <TAG>   # Use the binary version appropriate for your sync height
+    make install         # installs sunrised in $GOBIN
+    sunrised version
+    ```
+  </Step>
+  <Step title="Initialize node">
+    ```bash
+    export CHAIN_ID=sunrise-1
+    export MONIKER="my-node"
+    sunrised init "$MONIKER" --chain-id $CHAIN_ID
+    ```
+  </Step>
+  <Step title="Fetch genesis (mainnet)">
+    ```bash
+    rm -f $HOME/.sunrise/config/genesis.json
+    curl -L https://raw.githubusercontent.com/sunriselayer/network/main/sunrise-1/genesis.json -o $HOME/.sunrise/config/genesis.json
+    ```
+  </Step>
+  <Step title="Set minimum gas prices">
+    ```bash
+    sed -i.bak -e 's/^minimum-gas-prices *=.*/minimum-gas-prices = "0.025uusdrise"/' $HOME/.sunrise/config/app.toml
+    ```
+  </Step>
+  <Step title="(Optional) Seeds & persistent peers">
+    Seeds and peers are published in the **network** repo. Example (mainnet seeds):
+
+    ```bash
+    SEEDS=$(curl -sL https://raw.githubusercontent.com/sunriselayer/network/main/sunrise-1/seeds.txt | tr '\n' ',')
+    sed -i.bak -e "s/^seeds *=.*/seeds = \"$SEEDS\"/" $HOME/.sunrise/config/config.toml
+    ```
+
+    You can also populate `persistent_peers` similarly.
+  </Step>
+  <Step title="(Optional) Storage & indexing">
+    If connecting to a bridge node or running an archive, enable tx indexing and retain all block data:
+
+    ```toml
+    # config.toml
+    indexer = "kv"
+    
+    # app.toml
+    min-retain-blocks = 0
+    ```
+  </Step>
+  <Step title="Start the node">
+    **With Cosmovisor** (recommended for upgrades): follow the official Cosmovisor setup, then start.\
+    **Without Cosmovisor**:
+
+    ```bash
+    sunrised start
+    ```
+  </Step>
+</Steps>
+
+## Verify sync
+
+```bash
+curl -s localhost:26657/status | jq .result.sync_info.catching_up
+```
+
+<Note>
+  Mainnet endpoints and the latest release tags are listed under **Run a Sunrise Node → Networks → Mainnet**. Snapshots are often provided by third parties (e.g., Polkachu). Validate source and height before use.
+</Note>

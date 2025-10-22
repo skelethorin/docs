@@ -1,0 +1,51 @@
+---
+title: "Upgrade"
+description: "Handle Sunrise chain upgrades safely. Cosmovisor automation and manual procedures for soft/hard forks."
+---
+
+## Cosmovisor (recommended)
+
+<Steps>
+  <Step title="Set up Cosmovisor">
+    Configure Cosmovisor per the official tutorial so it manages your `sunrised` binary under `~/.sunrise/cosmovisor/`. Enable:
+
+    ```bash
+    export DAEMON_ALLOW_DOWNLOAD_BINARIES=true
+    ```
+  </Step>
+  <Step title="Follow governance proposals">
+    Upgrades are scheduled via on-chain governance. Confirm proposed **height** and **target binary version** before the event.
+  </Step>
+  <Step title="Automatic switch at upgrade height">
+    With Cosmovisor, the process switches to the prepared binary at the scheduled height with minimal downtime. Ensure your `upgrades/<name>/bin/sunrised` is present beforehand.
+  </Step>
+</Steps>
+
+## Manual upgrades (no Cosmovisor)
+
+<Steps>
+  <Step title="Identify the correct tag">
+    Check the **network** repository for your chain (e.g., `sunrise-1`) and the latest release on GitHub for the required `sunrised` version.
+  </Step>
+  <Step title="Build and install">
+    ```bash
+    cd ~/sunrise || git clone https://github.com/sunriselayer/sunrise.git && cd sunrise
+    git fetch --all
+    git checkout <NEW_TAG>
+    make install
+    sunrised version
+    ```
+  </Step>
+  <Step title="Restart and verify">
+    ```bash
+    sudo systemctl stop sunrised || true
+    sunrised start &
+    curl -s localhost:26657/status | jq .result.sync_info.catching_up
+    ```
+  </Step>
+</Steps>
+
+### Soft vs Hard Fork
+
+- **Soft fork**: same chain-id, binary changes handled by an upgrade handler; Cosmovisor can automate.
+- **Hard fork**: new `genesis.json` and often a **new chain-id**; syncing starts from height 1; follow migration notes provided in the proposal.

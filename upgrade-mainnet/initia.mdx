@@ -1,0 +1,54 @@
+---
+title: "Upgrade"
+description: "How to handle Initia node upgrades using Cosmovisor (auto) or manual binary replacement."
+---
+
+## Recommended: Cosmovisor (auto-upgrade)
+
+<Steps>
+  <Step title="Enable Cosmovisor during setup">
+    If you used **Weave**, select the **automatic upgrades via Cosmovisor** option in the wizard. This will wire your node so new binaries are picked up at governance-scheduled heights.
+  </Step>
+  <Step title="Service layout & env">
+    Cosmovisor expects a directory layout under `~/.initia/cosmovisor/` with `genesis/` and `upgrades/<name>/bin/`. When an upgrade triggers, the daemon switches to the new binary automatically.
+  </Step>
+  <Step title="Monitor upcoming proposals">
+    Keep an eye on governance proposals that schedule upgrades. Confirm the **target version tag** and the **upgrade height** before the event.
+  </Step>
+</Steps>
+
+## Manual upgrade (if not using Cosmovisor)
+
+<Steps>
+  <Step title="Find the target tag">
+    Identify the correct **release tag** for your network (Mainnet `interwoven-1` or Testnet `initiation-2`). Use the official releases and notes.
+  </Step>
+  <Step title="Build or download the new binary">
+    ```bash
+    cd ~/initia || git clone https://github.com/initia-labs/initia.git && cd initia
+    git fetch --all
+    git checkout <NEW_TAG>
+    make install
+    initiad version
+    ```
+  </Step>
+  <Step title="Stop, replace, restart">
+    ```bash
+    sudo systemctl stop initiad || true
+    # If using a static path, ensure $(which initiad) now points to the new binary
+    sudo systemctl start initiad
+    journalctl -u initiad -f
+    ```
+  </Step>
+  <Step title="Post-upgrade checks">
+    ```bash
+    initiad version
+    curl -s localhost:26657/status | jq .result.node_info.network
+    curl -s localhost:26657/status | jq .result.sync_info.catching_up
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  If your node falls behind or you upgraded late, consider **state sync** or a **snapshot** provider compatible with your chain and height. Always verify integrity and provenance.
+</Note>

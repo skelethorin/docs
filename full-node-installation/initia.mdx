@@ -1,0 +1,145 @@
+---
+title: "Full Node Installation — Initia (L1)"
+description: "Step-by-step guide to run an Initia L1 full node using the Weave CLI (recommended) or the raw initiad binary. Covers both Mainnet (interwoven-1) and Testnet (initiation-2)."
+---
+
+<Note>
+  This guide is based on the official Initia docs and registry. Network details and genesis links are maintained by Initia. Refer to the **Initia L1 Networks** page for the latest chain IDs, endpoints, and minimum gas prices.
+</Note>
+
+## Quick facts
+
+- **Binary**: `initiad`
+- **Recommended helper CLI**: [`Weave`](https://github.com/initia-labs/weave)
+- **Mainnet Chain ID**: `interwoven-1`
+- **Testnet Chain ID**: `initiation-2`
+- **Min gas price**: `0.015uinit` (see _Initia L1 Networks_)
+- **Genesis (Mainnet)**: `https://storage.googleapis.com/init-common-genesis/interwoven-1/genesis.json`
+- **Genesis (Testnet)**: See the **Networks** page for the latest file.
+
+<Note>
+  We recommend the **Weave CLI** path for the simplest, interactive setup and automatic (Cosmovisor) upgrades. If you prefer manual control, use the **Raw initiad** path below.
+</Note>
+
+## Option A — Install with Weave (recommended)
+
+<Steps>
+  <Step title="Install prerequisites">
+    - Linux/macOS host (Ubuntu 22.04+ recommended).
+    - If building Weave from source: **Go 1.23+** and **lz4** are required.
+    - Otherwise, use prebuilt or Homebrew on macOS.
+
+    **macOS (Homebrew):**
+
+    ```bash
+    brew install initia-labs/tap/weave
+    ```
+
+    **Linux:** follow the instructions in the Weave repo’s README or releases page.
+  </Step>
+  <Step title="Initialize your node (guided)">
+    Run the guided bootstrap and select **Mainnet (interwoven-1)** or **Testnet (initiation-2)** when prompted. The wizard also configures pruning, API endpoints, peers/seeds, and **Cosmovisor** if you opt in.
+
+    ```bash
+    weave initia init
+    ```
+
+    After the wizard finishes, config files live in `~/.initia/config/{app.toml,config.toml}` and snapshot/state-sync (if chosen) is handled automatically.
+  </Step>
+  <Step title="Start the node">
+    ```bash
+    weave initia start
+    ```
+
+    Use `--detach` to run in the background. Logs stream from Cosmovisor if enabled.
+  </Step>
+</Steps>
+
+## Option B — Raw `initiad` (manual)
+
+<Steps>
+  <Step title="Install initiad">
+    Build from source or use a prebuilt release:
+
+    ```bash
+    # From source (example)
+    sudo apt update && sudo apt install -y build-essential golang lz4
+    git clone https://github.com/initia-labs/initia.git
+    cd initia
+    git checkout <TAG>   # e.g., v1.x.y matching your target network
+    make install         # installs initiad into $GOBIN or $GOPATH/bin
+    initiad version
+    ```
+  </Step>
+  <Step title="Initialize and pick network">
+    ```bash
+    # Choose one:
+    export CHAIN_ID=interwoven-1   # Mainnet
+    # export CHAIN_ID=initiation-2 # Testnet
+    
+    initiad init my-node --chain-id $CHAIN_ID
+    ```
+  </Step>
+  <Step title="Download the genesis file">
+    **Mainnet example:**
+
+    ```bash
+    curl -L https://storage.googleapis.com/init-common-genesis/interwoven-1/genesis.json -o $HOME/.initia/config/genesis.json
+    ```
+
+    **Testnet:** fetch the current testnet genesis URL from the **Initia L1 Networks** page or the **Initia Registry** and place it at the same path.
+  </Step>
+  <Step title="Configure peers, seeds, and gas">
+    Edit `$HOME/.initia/config/config.toml`:
+
+    ```toml
+    # persistent_peers = "peer1@ip1:26656,peer2@ip2:26656"
+    # seeds = "seed1@ip:26656"
+    ```
+
+    Edit `$HOME/.initia/config/app.toml` to set **minimum-gas-prices**:
+
+    ```toml
+    minimum-gas-prices = "0.015uinit"
+    ```
+  </Step>
+  <Step title="(Optional) Systemd service">
+    ```bash
+    sudo tee /etc/systemd/system/initiad.service >/dev/null <<'EOF'
+    [Unit]
+    Description=Initia L1 Node
+    After=network-online.target
+    
+    [Service]
+    User=%i
+    ExecStart=$(which initiad) start
+    Restart=always
+    RestartSec=3
+    LimitNOFILE=65535
+    
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+    
+    sudo systemctl daemon-reload
+    sudo systemctl enable --now initiad.service
+    journalctl -u initiad -f
+    ```
+  </Step>
+</Steps>
+
+## Verify sync
+
+```bash
+curl -s localhost:26657/status | jq .result.sync_info
+```
+
+<Note>
+  For **latest chain IDs, genesis URLs, peers/seeds, and gas price policy**, check the official <a href="https://docs.initia.xyz/resources/developer/initia-l1" target="_blank">
+  Initia L1 Networks</a>
+
+   page and the <a href="https://github.com/initia-labs/initia-registry" target="_blank">
+  Initia Registry</a>
+
+  .
+</Note>
