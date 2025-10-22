@@ -69,7 +69,8 @@
                   {
                     "group": "Full Node",
                     "pages": [
-                      "full-node-installation/avail"
+                      "full-node-installation/avail",
+                      "upgrade/avail"
                     ]
                   }
                 ]
