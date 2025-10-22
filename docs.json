@@ -67,7 +67,7 @@
                 "pages": [
                   "networks/avail",
                   {
-                    "group": "Full Node Installation",
+                    "group": "Full Node",
                     "pages": [
                       "full-node-installation/avail"
                     ]
