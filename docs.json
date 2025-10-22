@@ -147,6 +147,34 @@
                     ]
                   }
                 ]
+              },
+              {
+                "group": "Sunrise",
+                "icon": "https://cloudflare-snapshots.krews.xyz/sunrise.png",
+                "pages": [
+                  "networks/sunrise",
+                  {
+                    "group": "Full Node",
+                    "pages": [
+                      "full-node-installation/sunrise",
+                      "upgrade-mainnet/sunrise"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Initia",
+                "icon": "https://cloudflare-snapshots.krews.xyz/initia.png",
+                "pages": [
+                  "networks/initia",
+                  {
+                    "group": "Full Node",
+                    "pages": [
+                      "full-node-installation/initia",
+                      "upgrade-mainnet/initia"
+                    ]
+                  }
+                ]
               }
             ]
           }
