@@ -1,0 +1,113 @@
+---
+title: "Installation Guide"
+description: "Run an Aptos Public Fullnode (PFN) on mainnet or testnet using Docker or from source. This guide follows the official Aptos docs and keeps only the essential steps."
+sidebarTitle: "Full Node Installation"
+---
+
+> This guide installs a **Public Fullnode (PFN)**. Choose **mainnet** or **testnet** by downloading the matching genesis & waypoint files.
+
+## 1) Prerequisites
+
+- Linux x86_64
+- Docker (for the Docker path) **or** Rust toolchain (for source build)
+- 1TB+ SSD recommended for longevity; see official requirements page if needed.
+
+## 2) Create a PFN working directory
+
+```bash
+mkdir -p ~/aptos-pfn && cd ~/aptos-pfn
+```
+
+## 3) Download network files (genesis & waypoint)
+
+**Mainnet**:
+
+```bash
+curl -O https://raw.githubusercontent.com/aptos-labs/aptos-networks/main/mainnet/genesis.blob
+curl -O https://raw.githubusercontent.com/aptos-labs/aptos-networks/main/mainnet/waypoint.txt
+```
+
+**Testnet** (use the matching paths under `aptos-networks/testnet/`):
+
+```bash
+# Example (confirm the exact filenames in the repo):
+# https://github.com/aptos-labs/aptos-networks/tree/main/testnet
+```
+
+## 4) Create a PFN config
+
+Copy the template and edit paths:
+
+```bash
+# If building from source, after cloning aptos-core:
+# cp config/src/config/test_data/public_full_node.yaml fullnode.yaml
+
+# Alternatively, create a minimal fullnode.yaml and set:
+# base:
+#   waypoint:
+#     from_file: "./waypoint.txt"
+#   data_dir: "/var/lib/aptos/data"  # choose your data dir
+# execution:
+#   genesis_file_location: "./genesis.blob"
+```
+
+---
+
+## Path A — Run with Docker
+
+### A1) Prepare a local config file
+
+Place `fullnode.yaml` in `~/aptos-pfn` (as shown above).
+
+### A2) Start the container
+
+```bash
+docker pull aptoslabs/validator:mainnet
+
+docker run -d --name aptos-pfn   -v $(pwd):/opt/aptos/etc   -p 8080:8080 -p 9101:9101   aptoslabs/validator:mainnet   aptos-node -f /opt/aptos/etc/fullnode.yaml
+```
+
+- `-p 8080:8080` exposes the REST API.
+- `-p 9101:9101` exposes metrics.
+
+> You can swap the image tag to the **testnet** variant if running on testnet.
+
+---
+
+## Path B — Build and run from source
+
+### B1) Clone and build
+
+```bash
+git clone https://github.com/aptos-labs/aptos-core.git
+cd aptos-core
+git checkout --track origin/mainnet   # or 'testnet'
+cargo build -p aptos-node --release
+```
+
+### B2) Copy config and run
+
+```bash
+cp config/src/config/test_data/public_full_node.yaml ~/aptos-pfn/fullnode.yaml
+cd ~/aptos-pfn
+
+# Edit fullnode.yaml so:
+# - base.data_dir points to your data dir
+# - base.waypoint.from_file points to ./waypoint.txt
+# - execution.genesis_file_location points to ./genesis.blob
+
+# Start the node
+cargo run -p aptos-node --release -- -f ./fullnode.yaml
+```
+
+---
+
+## 5) Verify the node
+
+Once running, check health:
+
+```bash
+curl -s http://localhost:8080/v1 | jq
+```
+
+Or follow the **Verify PFN** guide from Aptos docs.

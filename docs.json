@@ -70,7 +70,7 @@
                     "group": "Full Node",
                     "pages": [
                       "full-node-installation/avail",
-                      "upgrade/avail"
+                      "upgrade-mainnet/avail"
                     ]
                   }
                 ]
@@ -81,18 +81,12 @@
                 "pages": [
                   "networks/aptos",
                   {
-                    "group": "Mainnet",
+                    "group": "Full Node",
                     "pages": [
-                      "node-installation-mainnet/aptos",
+                      "full-node-installation/aptos",
                       "upgrade-mainnet/aptos"
                     ]
-                  },                   
-                  {
-                    "group": "Testnet",
-                    "pages": [
-                      "node-installation-testnet/aptos"
-                    ]
-                  }
+                  }            
                 ]
               },
               {
