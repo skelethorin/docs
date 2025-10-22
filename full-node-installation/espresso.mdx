@@ -19,7 +19,7 @@ description: "Run an Espresso sequencer node (a.k.a. Espresso node). Mainnet-0 i
 docker run -it --name espresso-sequencer   -e ESPRESSO_SEQUENCER_L1_PROVIDER=<http://your-l1:8545>   -e ESPRESSO_SEQUENCER_ORCHESTRATOR_URL=<https://orchestrator.yournet>   -e ESPRESSO_SEQUENCER_CDN_ENDPOINT=<cdn.host:port>   -e ESPRESSO_STATE_RELAY_SERVER_URL=<https://state-relay.yournet>   -e ESPRESSO_SEQUENCER_STATE_PEERS=<peer1,peer2,...>   -e ESPRESSO_SEQUENCER_GENESIS_FILE=/etc/espresso/genesis.toml   -e ESPRESSO_SEQUENCER_LIBP2P_BIND_ADDRESS=0.0.0.0:9000   -e ESPRESSO_SEQUENCER_LIBP2P_ADVERTISE_ADDRESS=<public.ip>:9000   -v $(pwd)/genesis.toml:/etc/espresso/genesis.toml   ghcr.io/espressosystems/espresso-sequencer/sequencer:main   sequencer -- status --http 0.0.0.0:4000 -- query
 ```
 
-> The image also supports a `keygen` helper to produce keys inside a container volume; see the docs.
+The image also supports a `keygen` helper to produce keys inside a container volume; see the docs.
 
 ## 2) From source (alternative)
 

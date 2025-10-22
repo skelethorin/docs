@@ -16,7 +16,7 @@ sidebarTitle: "Upgrade"
 
 ## A) Upgrade — Pre-built binary
 
-> Replace the existing `avail-node` binary with the latest release, then restart the service.
+Replace the existing `avail-node` binary with the latest release, then restart the service.
 
 ```bash
 # 1) Stop the service
@@ -37,7 +37,7 @@ sudo systemctl start avail.service
 journalctl -u avail.service -f -o cat
 ```
 
-> Some packages/bundles name the binary `data-avail`. If that's your case, replace `avail-node` in the commands above with `data-avail`.
+Some packages/bundles name the binary `data-avail`. If that's your case, replace `avail-node` in the commands above with `data-avail`.
 
 ## B) Upgrade — Docker
 

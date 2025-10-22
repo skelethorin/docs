@@ -111,7 +111,7 @@
                   {
                     "group": "Sequencer Node",
                     "pages": [
-                      "node-installation-mainnet/espresso",
+                      "full-node-installation/espresso",
                       "upgrade-mainnet/espresso"
                     ]
                   }

@@ -12,7 +12,7 @@ sidebarTitle: "Installation"
 | CPU (amd64/x86) | 4 cores  | 8 cores     |
 | Storage (SSD)   | 20–40 GB | 200–300 GB  |
 
-> Prefer a stable Linux server distribution. Plan a persistent data directory (e.g., `/var/lib/avail`).
+Prefer a stable Linux server distribution. Plan a persistent data directory (e.g., `/var/lib/avail`).
 
 ## Choose a network
 
@@ -49,7 +49,7 @@ docker run --restart=on-failure -d   -v /root/avail/node-data:/da/node-data   -p
 docker run --restart=on-failure -d   -v /root/avail/node-data:/da/node-data   -p 9944:9944 -p 30333:30333   docker.io/availj/avail:<LATEST-AVAIL-NODE-VERSION>   --chain turing -d ./output --name "<your-node-name>"
 ```
 
-> Replace `<LATEST-AVAIL-NODE-VERSION>` with the latest tag from Docker Hub or the Releases page.
+Replace `<LATEST-AVAIL-NODE-VERSION>` with the latest tag from Docker Hub or the Releases page.
 
 ## Option C — Build from source
 
