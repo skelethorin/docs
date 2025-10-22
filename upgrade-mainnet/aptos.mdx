@@ -1,0 +1,41 @@
+---
+title: "Upgrade"
+description: "Upgrade an Aptos Public Fullnode (PFN) installed via Docker or from source. Minimal, correct steps with verification links."
+sidebarTitle: "Upgrade"
+---
+
+> These steps apply to **PFN** on **mainnet** or **testnet**. Your network is determined by the **docker image tag** or **git branch** and the **genesis/waypoint** files in your config.
+
+## A) Docker-based PFN
+
+```bash
+# 1) Pull the new image
+docker pull aptoslabs/validator:mainnet    # use :testnet for testnet
+
+# 2) Stop + remove the old container (adjust the name if different)
+docker stop aptos-pfn || true && docker rm aptos-pfn || true
+
+# 3) Start with the SAME volume and your config (fullnode.yaml + genesis/waypoint)
+docker run -d --name aptos-pfn   -v $(pwd):/opt/aptos/etc   -p 8080:8080 -p 9101:9101   aptoslabs/validator:mainnet   aptos-node -f /opt/aptos/etc/fullnode.yaml
+```
+
+## B) Source-based PFN
+
+```bash
+# 1) Update source
+cd aptos-core || git clone https://github.com/aptos-labs/aptos-core.git && cd aptos-core
+git fetch --tags
+git checkout origin/mainnet   # or origin/testnet
+
+# 2) Rebuild
+cargo build -p aptos-node --release
+
+# 3) Restart your service/process using the new binary
+# e.g., systemd: systemctl restart aptos-pfn
+```
+
+## Verify
+
+- **REST**: `curl -s http://127.0.0.1:8080/v1 | jq` (returns chain_id and ledger info)
+- **Metrics**: `curl -s http://127.0.0.1:9101/metrics | head`
+- **NHC** (optional): follow the Node Health Checker guide above.
