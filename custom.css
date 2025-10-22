@@ -23,11 +23,11 @@ button img {
     width: 4px; 
   } 
     
-  ::-webkit-scrollbar-track { 
-    background: #18d2a5; 
+  ::-webkit-scrollbar-track {
+    background: #161d1f;
   } 
   
-  ::-webkit-scrollbar-thumb { 
-    background: #161d1f; 
+  ::-webkit-scrollbar-thumb {
+    background: #18d2a5;
     border-radius: 7px; 
   }
