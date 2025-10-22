@@ -1,22 +1,22 @@
 ---
-title: "Full Node Installation"
+title: "Installation Guide"
 description: "Install and run an Avail full node on Mainnet or Turing Testnet using pre-built binaries, Docker, or by building from source. This guide is minimal by design—no upgrade or misc. command sections."
 sidebarTitle: "Full Node Installation"
 ---
 
 ## System requirements
 
-| Component | Minimum | Recommended |
-|---|---|---|
-| RAM | 8 GB | 16 GB |
-| CPU (amd64/x86) | 4 cores | 8 cores |
-| Storage (SSD) | 20–40 GB | 200–300 GB |
+| Component       | Minimum  | Recommended |
+| --------------- | -------- | ----------- |
+| RAM             | 8 GB     | 16 GB       |
+| CPU (amd64/x86) | 4 cores  | 8 cores     |
+| Storage (SSD)   | 20–40 GB | 200–300 GB  |
 
 > Prefer a stable Linux server distribution. Plan a persistent data directory (e.g., `/var/lib/avail`).
 
 ## Choose a network
 
-- **Mainnet**: `--chain mainnet`  
+- **Mainnet**: `--chain mainnet`
 - **Turing Testnet**: `--chain turing` (if your binary supports it) or use the Turing **chainspec** from Network Info and pass its file path: `--chain /path/to/turing/chainspec.raw.json`.
 
 ## Option A — Pre-built binary (recommended)
@@ -78,6 +78,5 @@ mkdir -p /var/lib/avail
 
 ## Verify the node
 
-- Logs should show peers and heights, e.g. `Idle (N peers), best: #<height> ... finalized #<height> ...`  
+- Logs should show peers and heights, e.g. `Idle (N peers), best: #<height> ... finalized #<height> ...`
 - Check **Telemetry**: find your node by its `--name` under the **Mainnet** or **Turing** tab.
-
