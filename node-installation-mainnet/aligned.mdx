@@ -1,5 +1,67 @@
 ---
-title: 'New file'
-description: 'Description of your new file.'
+title: "Installation Guide (Holesky/Mainnet)"
+description: "Run the Aligned Layer Operator binary using the official steps. This guide is trimmed to the essential build, configure, and start sequence."
+sidebarTitle: "Operator Installation"
 ---
 
+<Note>
+  **Note:** You must be **whitelisted** to operate on Aligned. Current operator version in docs: `v0.19.1` ([check docs for updates](https://github.com/yetanotherco/aligned_layer/releases/tag/v0.19.1)).
+</Note>
+
+## 1) Requirements
+
+- Linux x86_64
+- Go, Rust, Foundry
+- Build deps: `pkg-config`, `libssl-dev`, `g++`
+
+| **Component** | **Specification** |
+| ------------- | ----------------- |
+| **CPU**       | 16 cores          |
+| **Memory**    | 32 GB RAM         |
+| **Bandwidth** | 1 Gbps            |
+| **Storage**   | 256 GB disk space |
+
+## 2) Clone and build
+
+```bash
+git clone https://github.com/yetanotherco/aligned_layer.git --branch v0.19.1
+cd aligned_layer
+
+# Install Foundry
+make foundry_install && foundryup
+
+# Build operator (testnet example: Holesky/Hoodi)
+make operator_build ENVIRONMENT=testnet
+
+# For mainnet build:
+# make operator_build ENVIRONMENT=mainnet
+```
+
+## 3) Configure your operator
+
+Provide RPC endpoints, keys, and strategy-specific settings in your config file(s). See the docs for the required fields and supported strategies list.
+
+## 4) Register the operator
+
+Follow the registration step in docs (requires whitelisting and EigenLayer operator registration).
+
+## 5) Start the operator
+
+```bash
+# From the repo root, using your config
+./operator/build/aligned-operator --config <path_to_config.toml>
+```
+
+(Optional) Run with systemd as shown in the docs for persistence.
+
+## 6) Check version & status
+
+```bash
+./operator/build/aligned-operator --version
+
+# Telemetry (replace <operator_address>):
+# Mainnet
+curl https://mainnet.telemetry.alignedlayer.com/versions/<operator_address>
+# Holesky
+curl https://holesky.telemetry.alignedlayer.com/versions/<operator_address>
+```
