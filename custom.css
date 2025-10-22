@@ -28,6 +28,6 @@ button img {
   } 
   
   ::-webkit-scrollbar-thumb { 
-    background: #161d1f 
+    background: #161d1f; 
     border-radius: 7px; 
   }
