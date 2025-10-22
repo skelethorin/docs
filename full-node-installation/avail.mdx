@@ -1,0 +1,83 @@
+---
+title: "Full Node Installation"
+description: "Install and run an Avail full node on Mainnet or Turing Testnet using pre-built binaries, Docker, or by building from source. This guide is minimal by design—no upgrade or misc. command sections."
+sidebarTitle: "Full Node Installation"
+---
+
+## System requirements
+
+| Component | Minimum | Recommended |
+|---|---|---|
+| RAM | 8 GB | 16 GB |
+| CPU (amd64/x86) | 4 cores | 8 cores |
+| Storage (SSD) | 20–40 GB | 200–300 GB |
+
+> Prefer a stable Linux server distribution. Plan a persistent data directory (e.g., `/var/lib/avail`).
+
+## Choose a network
+
+- **Mainnet**: `--chain mainnet`  
+- **Turing Testnet**: `--chain turing` (if your binary supports it) or use the Turing **chainspec** from Network Info and pass its file path: `--chain /path/to/turing/chainspec.raw.json`.
+
+## Option A — Pre-built binary (recommended)
+
+1. Download the latest tarball from **Releases** and extract it.
+2. Run the node with a persistent data path:
+
+```bash
+mkdir -p /var/lib/avail
+./avail-node --name "<your-node-name>" --chain mainnet -d /var/lib/avail
+```
+
+**Run on Turing (testnet):**
+
+```bash
+./avail-node --name "<your-node-name>" --chain turing -d /var/lib/avail
+# or provide the explicit chainspec file if needed:
+# ./avail-node --name "<your-node-name>" --chain /path/to/turing/chainspec.raw.json -d /var/lib/avail
+```
+
+## Option B — Docker
+
+```bash
+docker run --restart=on-failure -d   -v /root/avail/node-data:/da/node-data   -p 9944:9944 -p 30333:30333   docker.io/availj/avail:<LATEST-AVAIL-NODE-VERSION>   --chain mainnet -d ./output --name "<your-node-name>"
+```
+
+**Turing (testnet):**
+
+```bash
+docker run --restart=on-failure -d   -v /root/avail/node-data:/da/node-data   -p 9944:9944 -p 30333:30333   docker.io/availj/avail:<LATEST-AVAIL-NODE-VERSION>   --chain turing -d ./output --name "<your-node-name>"
+```
+
+> Replace `<LATEST-AVAIL-NODE-VERSION>` with the latest tag from Docker Hub or the Releases page.
+
+## Option C — Build from source
+
+```bash
+# Install Rust (if missing)
+curl https://sh.rustup.rs -sSf | sh
+source $HOME/.cargo/env
+
+# Build
+git clone https://github.com/availproject/avail.git
+cd avail
+cargo build --release --locked
+
+# Run (Mainnet)
+mkdir -p /var/lib/avail
+./target/release/avail-node --name "<your-node-name>" --chain mainnet -d /var/lib/avail
+```
+
+**Run on Turing:**
+
+```bash
+./target/release/avail-node --name "<your-node-name>" --chain turing -d /var/lib/avail
+# or with an explicit chainspec file:
+# ./target/release/avail-node --name "<your-node-name>" --chain /path/to/turing/chainspec.raw.json -d /var/lib/avail
+```
+
+## Verify the node
+
+- Logs should show peers and heights, e.g. `Idle (N peers), best: #<height> ... finalized #<height> ...`  
+- Check **Telemetry**: find your node by its `--name` under the **Mainnet** or **Turing** tab.
+

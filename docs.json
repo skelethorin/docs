@@ -67,16 +67,9 @@
                 "pages": [
                   "networks/avail",
                   {
-                    "group": "Mainnet",
+                    "group": "Full Node Installation",
                     "pages": [
-                      "node-installation-mainnet/avail",
-                      "upgrade-mainnet/avail"
-                    ]
-                  },                   
-                  {
-                    "group": "Testnet",
-                    "pages": [
-                      "node-installation-testnet/avail"
+                      "full-node-installation/avail"
                     ]
                   }
                 ]
