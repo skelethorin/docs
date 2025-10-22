@@ -95,16 +95,10 @@
                 "pages": [
                   "networks/aligned",
                   {
-                    "group": "Mainnet",
+                    "group": "Operator",
                     "pages": [
                       "node-installation-mainnet/aligned",
                       "upgrade-mainnet/aligned"
-                    ]
-                  },                   
-                  {
-                    "group": "Testnet",
-                    "pages": [
-                      "node-installation-testnet/aligned"
                     ]
                   }
                 ]
