@@ -125,7 +125,7 @@
                   {
                     "group": "Full Node",
                     "pages": [
-                      "node-installation-mainnet/dymension",
+                      "full-node-installation/dymension",
                       "upgrade-mainnet/dymension"
                     ]
                   }
@@ -139,7 +139,7 @@
                   {
                     "group": "Provider",
                     "pages": [
-                      "node-installation-mainnet/lava",
+                      "full-node-installation/lava",
                       "upgrade-mainnet/lava"
                     ]
                   }
