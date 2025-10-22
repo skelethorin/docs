@@ -1,0 +1,51 @@
+---
+title: "Installation"
+description: "Run an Espresso sequencer node (a.k.a. Espresso node). Mainnet-0 is permissioned; testnets are open—follow the required environment values."
+---
+
+<Note>
+  Espresso’s “sequencer node” ships as a Rust binary and Docker image. For **Mainnet 0**, only pre-registered operators can run. For testnets, you can run openly with the correct configuration (L1 RPC, orchestrator URL, CDN endpoint, state relay server, genesis, peers).
+</Note>
+
+## Prerequisites
+
+- Linux with **Docker** (or a recent Rust toolchain if building from source).
+- Access to an **Ethereum JSON-RPC** endpoint for the configured L1.
+
+## 1) Docker (recommended)
+
+```bash
+# Replace <...> with real values
+docker run -it --name espresso-sequencer   -e ESPRESSO_SEQUENCER_L1_PROVIDER=<http://your-l1:8545>   -e ESPRESSO_SEQUENCER_ORCHESTRATOR_URL=<https://orchestrator.yournet>   -e ESPRESSO_SEQUENCER_CDN_ENDPOINT=<cdn.host:port>   -e ESPRESSO_STATE_RELAY_SERVER_URL=<https://state-relay.yournet>   -e ESPRESSO_SEQUENCER_STATE_PEERS=<peer1,peer2,...>   -e ESPRESSO_SEQUENCER_GENESIS_FILE=/etc/espresso/genesis.toml   -e ESPRESSO_SEQUENCER_LIBP2P_BIND_ADDRESS=0.0.0.0:9000   -e ESPRESSO_SEQUENCER_LIBP2P_ADVERTISE_ADDRESS=<public.ip>:9000   -v $(pwd)/genesis.toml:/etc/espresso/genesis.toml   ghcr.io/espressosystems/espresso-sequencer/sequencer:main   sequencer -- status --http 0.0.0.0:4000 -- query
+```
+
+> The image also supports a `keygen` helper to produce keys inside a container volume; see the docs.
+
+## 2) From source (alternative)
+
+```bash
+git clone https://github.com/EspressoSystems/espresso-sequencer.git
+cd espresso-sequencer
+cargo build --release
+# binary at target/release/sequencer
+```
+
+## 3) Choose a network
+
+- **Mainnet 0**: permissioned; endpoints are provided directly by Espresso.
+- **Mainnet 1 / Testnets**: obtain the correct **genesis** and **peer/orchestrator** values from the releases or testnet pages, then set the corresponding environment variables.
+
+## 4) Verify
+
+Start the **status** API and check metrics:
+
+```bash
+# if run with -- status --http 0.0.0.0:4000
+curl -s localhost:4000/status | jq
+# Look for increasing consensus views and connected peers
+```
+
+## Notes
+
+- Modes supported: **lightweight**, **archival**, **DA** (pruning with Postgres). Enable the **query** module for archival/DA modes as documented.
+- Keep L1 and orchestrator endpoints stable; peers must be reachable over **libp2p**.

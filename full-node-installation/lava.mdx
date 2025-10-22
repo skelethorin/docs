@@ -1,0 +1,96 @@
+---
+title: "Installation"
+description: "Run a Lava RPC Provider using `lavap`. Configure endpoints, start the provider, test it, then stake."
+---
+
+<Note>
+  Lava “providers” serve RPC traffic for supported chains and are **not** typical full nodes. You run the **lavap** process, point it at your own backend nodes (or trusted endpoints), and then **stake** to make the service public.
+</Note>
+
+## Prerequisites
+
+- Linux host with the **Lava binaries** (at least `lavap`) installed.
+- A synced backend node for each chain you plan to serve.
+- A Lava wallet funded with **LAVA** tokens.
+
+## 1) Create a provider config
+
+Example: Lava testnet provider (`lava-provider.yml`) and Ethereum provider (`eth-provider.yml`). Adjust hosts/ports to your setup.
+
+```yaml
+# lava-provider.yml
+endpoints:
+  - api-interface: tendermintrpc
+    chain-id: LAV1
+    network-address:
+      address: 127.0.0.1:2224
+      disable-tls: true
+    node-urls:
+      - url: ws://127.0.0.1:26657/websocket
+      - url: http://127.0.0.1:26657
+  - api-interface: grpc
+    chain-id: LAV1
+    network-address:
+      address: 127.0.0.1:2224
+      disable-tls: true
+    node-urls:
+      url: 127.0.0.1:9090
+  - api-interface: rest
+    chain-id: LAV1
+    network-address:
+      address: 127.0.0.1:2224
+      disable-tls: true
+    node-urls:
+      url: http://127.0.0.1:1317
+```
+
+```yaml
+# eth-provider.yml
+endpoints:
+  - api-interface: jsonrpc
+    chain-id: ETH1
+    network-address:
+      address: 127.0.0.1:2223
+      disable-tls: true
+    node-urls:
+      url: wss://your-ethereum-node/ws/
+```
+
+## 2) Start the provider
+
+```bash
+# Replace --from with your wallet name; pick the correct Lava chain-id
+# lava-mainnet-1 for mainnet, lava-testnet-2 for testnet
+screen -S lava-provider
+lavap rpcprovider lava-provider.yml --from <wallet_name> --geolocation 1 --chain-id lava-testnet-2 --log_level debug
+```
+
+You can run multiple configs (e.g., Ethereum) in separate terminals.
+
+## 3) Pre-flight test (before staking)
+
+```bash
+lavap test rpcprovider --from <wallet_name> --endpoints "<ENDPOINTS>"
+```
+
+## 4) Stake the provider (make it public)
+
+```bash
+# Stake a single service; amounts and geolocation depend on chain specs
+lavap tx pairing stake-provider <CHAIN_ID> <AMOUNT> <ENDPOINT ...> <GEO> <VALIDATOR> --chain-id lava-testnet-2
+```
+
+> A new stake applies at the next epoch (about 30 blocks).
+
+## 5) Verify
+
+List providers for a chain:
+
+```bash
+lavap query pairing providers "<NETWORK_NAME>" --node "<LAVA_RPC_NODE>"
+```
+
+## Notes
+
+- TLS and `lavavisor` are recommended for production deployments.
+- Use the official **Supported Chains** list to ensure your `api-interface`/endpoints match each spec.

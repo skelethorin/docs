@@ -109,16 +109,10 @@
                 "pages": [
                   "networks/espresso",
                   {
-                    "group": "Mainnet",
+                    "group": "Sequencer Node",
                     "pages": [
                       "node-installation-mainnet/espresso",
                       "upgrade-mainnet/espresso"
-                    ]
-                  },                   
-                  {
-                    "group": "Testnet",
-                    "pages": [
-                      "node-installation-testnet/espresso"
                     ]
                   }
                 ]
@@ -129,16 +123,10 @@
                 "pages": [
                   "networks/dymension",
                   {
-                    "group": "Mainnet",
+                    "group": "Full Node",
                     "pages": [
                       "node-installation-mainnet/dymension",
                       "upgrade-mainnet/dymension"
-                    ]
-                  },                   
-                  {
-                    "group": "Testnet",
-                    "pages": [
-                      "node-installation-testnet/dymension"
                     ]
                   }
                 ]
@@ -149,16 +137,10 @@
                 "pages": [
                   "networks/lava",
                   {
-                    "group": "Mainnet",
+                    "group": "Provider",
                     "pages": [
                       "node-installation-mainnet/lava",
                       "upgrade-mainnet/lava"
-                    ]
-                  },                   
-                  {
-                    "group": "Testnet",
-                    "pages": [
-                      "node-installation-testnet/lava"
                     ]
                   }
                 ]

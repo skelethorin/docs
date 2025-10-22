@@ -1,0 +1,37 @@
+---
+title: "Upgrade"
+description: "Upgrade the Lava RPC Provider (lavap) by building the latest tag and restarting the process."
+sidebarTitle: "Upgrade"
+---
+
+<Note>
+  The provider fronts your own chain nodes. Upgrading `lavap` does not upgrade those underlying nodes.
+</Note>
+
+## Build latest
+
+```bash
+cd ~/lava || git clone https://github.com/lavanet/lava.git ~/lava && cd ~/lava
+git fetch --tags
+# Checkout a specific tag if announced, else build default
+# git checkout vX.Y.Z
+LAVA_BINARY=lavap make install
+lavap version || lavap --version
+```
+
+## Restart
+
+```bash
+# If systemd-managed
+sudo systemctl restart lavap && journalctl -u lavap -f -o cat
+
+# Or run directly (example)
+lavap rpcprovider lava-provider.yml --from <wallet_name> --geolocation 1 --chain-id lava-mainnet-1
+```
+
+## Verify
+
+```bash
+# Connectivity test
+lavap test rpcprovider --from <wallet_name>
+```

@@ -1,0 +1,34 @@
+---
+title: "Upgrade"
+description: "Upgrade the Dymension Hub full node by building the target tag and restarting."
+sidebarTitle: "Upgrade"
+---
+
+> Confirm the **latest mainnet tag** from the official repository or docs before upgrading.
+
+## Build the target version
+
+```bash
+cd ~/dymension || git clone https://github.com/dymensionxyz/dymension.git ~/dymension && cd ~/dymension
+git fetch --tags
+git checkout v3.2.0   # replace with the announced version
+make install          # installs 'dymd' to $GOBIN
+dymd version --long
+```
+
+## Restart
+
+```bash
+# If using systemd
+sudo systemctl restart dymd
+journalctl -u dymd -f -o cat
+
+# Or run in foreground
+dymd start
+```
+
+## Verify
+
+```bash
+curl -s localhost:26657/status | jq '.result.sync_info'
+```

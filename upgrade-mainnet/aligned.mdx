@@ -1,0 +1,40 @@
+---
+title: "Upgrade"
+description: "Upgrade the Aligned Layer operator by checking out the target tag and rebuilding."
+sidebarTitle: "Upgrade"
+---
+
+> You must be **authorized/whitelisted** to operate. Follow the exact tag required by the network announcement.
+
+## Rebuild to a target version
+
+```bash
+# From the repo root
+cd ~/aligned_layer || git clone https://github.com/yetanotherco/aligned_layer.git ~/aligned_layer && cd ~/aligned_layer
+
+# Fetch and checkout the target tag (example: v0.19.1; replace as announced)
+git fetch --tags
+git checkout v0.19.1
+
+# Build (example: testnet)
+make operator_build ENVIRONMENT=testnet
+# For mainnet:
+# make operator_build ENVIRONMENT=mainnet
+```
+
+## Restart
+
+```bash
+# If you used systemd
+sudo systemctl restart aligned-operator && journalctl -u aligned-operator -f -o cat
+
+# Or run the binary directly with your config
+./operator/build/aligned-operator --config <path_to_config.toml>
+```
+
+## Verify
+
+```bash
+# Local version
+./operator/build/aligned-operator --version
+```

@@ -1,0 +1,64 @@
+---
+title: "Installation"
+description: "Run a Dymension Hub full node (Cosmos SDK). Build the `dymd` binary, join the right network, and sync."
+---
+
+<Note>
+  This keeps to the official flow: build `dymd`, fetch the **genesis** and **seeds**, select **mainnet** or **testnet**, then start and monitor sync.
+</Note>
+
+## Prerequisites
+
+- Linux with **Go** toolchain.
+- Open typical Cosmos ports (26656 p2p, 26657 RPC, 1317 REST, 9090 gRPC) as needed.
+
+## 1) Build `dymd`
+
+```bash
+git clone https://github.com/dymensionxyz/dymension.git --branch v3.2.0
+cd dymension
+make install
+dymd version --long
+```
+
+If `dymd` isn’t on your PATH:
+
+```bash
+export PATH=$PATH:$(go env GOPATH)/bin
+```
+
+## 2) Initialize
+
+```bash
+dymd init mynode --chain-id dymension_1100-1
+```
+
+## 3) Genesis & seeds
+
+- Download the **genesis.json** and **seed nodes** from the “Join a network” page, then place the files here:
+
+```bash
+# genesis
+cp /path/to/genesis.json ~/.dymension/config/genesis.json
+
+# seeds (comma-separated) into app.toml / config.toml as instructed
+```
+
+## 4) Start & monitor
+
+```bash
+dymd start
+# In another terminal:
+dymd status | jq .SyncInfo
+```
+
+Sync is complete when `catching_up` becomes `false` and the latest block height matches public explorers.
+
+## 5) (Optional) Snapshot
+
+To accelerate sync, use a trusted **snapshot** (community-provided) and ensure `~/.dymension/data` is emptied beforehand, then restart the node.
+
+## Notes
+
+- Mainnet chain-id: **dymension_1100-1**.
+- After you’re fully synced, you can proceed to validator creation separately.

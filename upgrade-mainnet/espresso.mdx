@@ -1,0 +1,25 @@
+---
+title: "Upgrade"
+description: "Upgrade the Espresso sequencer node by pulling a new image tag and restarting with persisted keys."
+sidebarTitle: "Upgrade"
+---
+
+> During **Mainnet 0**, only pre-registered operators can join consensus. Keys should be persisted on the host.
+
+## Pull new image & restart
+
+```bash
+# Stop existing container
+docker stop espresso-sequencer && docker rm espresso-sequencer
+
+# Pull the target tag (replace :main with the announced tag)
+docker pull ghcr.io/espressosystems/espresso-sequencer/sequencer:main
+
+# Restart with your existing volumes/env
+docker run -d --name espresso-sequencer   -v ~/espresso/keys:/keys   -e ESPRESSO_SEQUENCER_KEY_FILE=/keys/0.env   -p 3700:3700   ghcr.io/espressosystems/espresso-sequencer/sequencer:main   sequencer -- http -- config
+```
+
+## Verify
+
+- Status endpoint if enabled (e.g., `/status/metrics`).  
+- Confirm peer count and consensus view in logs/metrics.
