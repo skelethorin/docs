@@ -1,11 +1,11 @@
 ---
-title: "Full Node Installation"
+title: "Installation"
 description: "Install and run Celestia nodes (Light, Full Storage, Bridge) with a simple, production-ready workflow. This guide covers network selection for Mainnet and Mocha testnet."
 sidebarTitle: "Installation"
 ---
 
 <Note>
-This guide focuses on **celestia-node** (DA network) with optional notes for **celestia-app** (consensus). The steps below are intentionally minimal and point to the official docs for version specifics.
+  This guide focuses on **celestia-node** (DA network) with optional notes for **celestia-app** (consensus). The steps below are intentionally minimal and point to the official docs for version specifics.
 </Note>
 
 ## Prerequisites
@@ -25,64 +25,63 @@ This guide focuses on **celestia-node** (DA network) with optional notes for **c
     rm -rf celestia-node
     git clone https://github.com/celestiaorg/celestia-node.git
     cd celestia-node
-
+    
     # Install (installs 'celestia' and 'cel-key' binaries to $GOBIN if configured)
     make node-install
-
+    
     # Verify
     celestia version
     cel-key --help
     ```
   </Step>
-
   <Step title="Choose your network">
     Common options:
+
     - **Mainnet**: `--p2p.network celestia`
     - **Mocha testnet**: `--p2p.network mocha` (alias: `mocha-4`)
 
     Your node store will be created under `~/.celestia-<type>-<network>` (e.g., `~/.celestia-light-mocha-4`).
   </Step>
-
   <Step title="Run a Light Node (recommended to start)">
     ```bash
     # Initialize (creates key + config)
     celestia light init --p2p.network mocha
-
+    
     # (Optional) Quick sync via trusted hash & height — see Quick Start guide for details
     # Start the node, pointing to a consensus RPC endpoint
     celestia light start --p2p.network mocha       --core.ip rpc-mocha.pops.one       --core.port 9090
     # Mainnet example:
     # celestia light start --p2p.network celestia --core.ip <mainnet-rpc-host> --core.port 9090
     ```
+
     <Note>
-    Replace the RPC host with a reliable endpoint (your own, or a known public one). Using a trusted hash/height speeds up first sync—see the Quick Start guide.
+      Replace the RPC host with a reliable endpoint (your own, or a known public one). Using a trusted hash/height speeds up first sync—see the Quick Start guide.
     </Note>
   </Step>
-
   <Step title="Run a Full Storage Node">
     ```bash
     # Initialize the store
     celestia full init --p2p.network celestia
-
+    
     # Start
     celestia full start --p2p.network celestia
     # Testnet example:
     # celestia full start --p2p.network mocha
     ```
+
     Full storage nodes store block data and serve light nodes.
   </Step>
-
   <Step title="Run a Bridge Node">
     ```bash
     # Initialize
     celestia bridge init --p2p.network celestia
-
+    
     # Start — requires access to a consensus endpoint (celestia-app RPC/gRPC)
     celestia bridge start --p2p.network celestia       --core.ip <consensus-rpc-host>       --core.port 26657
     ```
+
     The bridge node connects the DA layer with consensus (celestia-app). Ensure your **celestia-app** RPC (26657) and gRPC (9090) are reachable.
   </Step>
-
   <Step title="(Optional) Install celestia-app (consensus)">
     ```bash
     # Fastest: download prebuilt (see official docs for latest)
@@ -92,10 +91,11 @@ This guide focuses on **celestia-node** (DA network) with optional notes for **c
     git clone https://github.com/celestiaorg/celestia-app.git
     cd celestia-app
     make install
-
+    
     # Verify
     celestia-appd version
     ```
+
     If you run your own **celestia-app** endpoint, you can point light/bridge nodes at it via `--core.ip` and `--core.port`.
   </Step>
 </Steps>
@@ -141,5 +141,5 @@ ss -ltnp | grep -E "2121|26658|26659"
 ```
 
 <Note>
-For issues, see the official troubleshooting page and confirm required ports: **2121** (P2P), **26658** (RPC), **26659** (gateway). Keep your binaries updated per the official guides.
+  For issues, see the official troubleshooting page and confirm required ports: **2121** (P2P), **26658** (RPC), **26659** (gateway). Keep your binaries updated per the official guides.
 </Note>
