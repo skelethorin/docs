@@ -31,15 +31,10 @@
                 "pages": [               
                   "networks/celestia",
                   {
-                    "group": "Mainnet",
+                    "group": "Full Node",
                     "pages": [
-                      "node-installation-mainnet/celestia"
-                    ]
-                  },                   
-                  {
-                    "group": "Testnet",
-                    "pages": [
-                      "node-installation-testnet/celestia"
+                      "full-node-installation/celestia",
+                      "upgrade-mainnet/celestia"
                     ]
                   }
                 ]
@@ -59,7 +54,8 @@
                   {
                     "group": "Testnet",
                     "pages": [
-                      "node-installation-testnet/story"
+                      "node-installation-testnet/story",
+                      "upgrade-mainnet/story"
                     ]
                   }
                 ]

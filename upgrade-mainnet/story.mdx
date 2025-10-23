@@ -1,5 +1,71 @@
 ---
-title: 'New file'
-description: 'Description of your new file.'
+title: "Upgrade"
+description: "How to upgrade Story clients: story-geth (execution) and story (consensus), including Cosmovisor scheduling."
+sidebarTitle: "Upgrade"
 ---
 
+## Upgrade story-geth
+
+<Steps>
+  <Step title="Stop services">
+    ```bash
+    sudo systemctl stop story-geth || true
+    sudo systemctl stop story || true
+    ```
+  </Step>
+
+  <Step title="Install new story-geth binary">
+    ```bash
+    cd $HOME
+    curl -L -o story-geth https://github.com/piplabs/story-geth/releases/latest/download/geth-linux-amd64
+    chmod +x story-geth && sudo mv story-geth /usr/local/bin/story-geth
+    story-geth version
+    ```
+  </Step>
+
+  <Step title="Restart">
+    ```bash
+    sudo systemctl start story-geth
+    sudo systemctl start story
+    journalctl -u story-geth -f -o cat
+    ```
+  </Step>
+</Steps>
+
+## Upgrade story (consensus)
+
+<Steps>
+  <Step title="Manual binary switch">
+    ```bash
+    sudo systemctl stop story
+
+    # Download new binary
+    cd $HOME
+    curl -L -o story https://github.com/piplabs/story/releases/latest/download/story-linux-amd64
+    chmod +x story && sudo mv story /usr/local/bin/story
+
+    sudo systemctl start story
+    story version
+    ```
+  </Step>
+
+  <Step title="Schedule with Cosmovisor (recommended)">
+    ```bash
+    # 1) Place the new binary
+    export UPGRADE_NAME=<upgrade_name>
+    mkdir -p $HOME/.story/story/cosmovisor/upgrades/$UPGRADE_NAME/bin
+    cp /usr/local/bin/story $HOME/.story/story/cosmovisor/upgrades/$UPGRADE_NAME/bin/
+
+    # 2) Schedule at announced height
+    source $HOME/.bash_profile || true
+    cosmovisor add-upgrade $UPGRADE_NAME $HOME/.story/story/cosmovisor/upgrades/$UPGRADE_NAME --force --upgrade-height <height>
+
+    # 3) Monitor
+    journalctl -u story -f -o cat
+    ```
+  </Step>
+</Steps>
+
+<Note>
+Always confirm **target versions** and **upgrade height/time** from official announcements before scheduling. Ensure the node is fully synced and has free disk space.
+</Note>

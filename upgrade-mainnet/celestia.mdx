@@ -1,5 +1,72 @@
 ---
-title: 'New file'
-description: 'Description of your new file.'
+title: "Upgrade"
+description: "Safely upgrade celestia-node and celestia-app, including Cosmovisor-managed consensus upgrades."
+sidebarTitle: "Upgrade"
 ---
 
+## celestia-node (DA) upgrade
+
+<Steps>
+  <Step title="Stop node & fetch latest release">
+    ```bash
+    # Stop your service (example name)
+    sudo systemctl stop celestia-light || true
+    sudo systemctl stop celestia-full || true
+    sudo systemctl stop celestia-bridge || true
+
+    # Update from source
+    cd $HOME/celestia-node || { cd $HOME; rm -rf celestia-node; git clone https://github.com/celestiaorg/celestia-node.git; cd celestia-node; }
+    git fetch --all --tags
+    git checkout $(git describe --tags --abbrev=0)
+    make node-install
+
+    celestia version
+    ```
+  </Step>
+
+  <Step title="Restart & verify">
+    ```bash
+    sudo systemctl start celestia-light || true
+    sudo systemctl start celestia-full || true
+    sudo systemctl start celestia-bridge || true
+
+    journalctl -u celestia-light -f -o cat || true
+    ```
+  </Step>
+</Steps>
+
+## celestia-app (consensus) upgrade with Cosmovisor
+
+<Steps>
+  <Step title="Install/verify Cosmovisor">
+    ```bash
+    # As per Cosmos SDK tooling (see official docs)
+    go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.6.0
+    cosmovisor version
+    ```
+  </Step>
+
+  <Step title="Prepare the new binary">
+    ```bash
+    # Build or download new celestia-appd and place under the target upgrade dir
+    # Example layout:
+    mkdir -p $HOME/.celestia-app/cosmovisor/upgrades/<UPGRADE_NAME>/bin
+    cp $(which celestia-appd) $HOME/.celestia-app/cosmovisor/upgrades/<UPGRADE_NAME>/bin/
+    ```
+  </Step>
+
+  <Step title="Schedule the upgrade">
+    Use your chain’s **governance proposal** (if applicable) or the advised block **height/time** from Celestia release notes. Cosmovisor will switch binaries automatically when the upgrade triggers.
+  </Step>
+
+  <Step title="Monitor & rollback plan">
+    ```bash
+    journalctl -u cosmovisor -f -o cat
+    # If needed, stop services and revert to the previous binary placed under `genesis/bin`.
+    ```
+  </Step>
+</Steps>
+
+<Note>
+Always confirm the **target version / upgrade height** from the official release notes and the network announcements before scheduling upgrades.
+</Note>

@@ -1,190 +1,115 @@
 ---
-title: "Installation Guide"
-description: "Guide to setting up a Story node for mainnet"
+title: "Installation"
+description: "Set up a Story mainnet full node (execution: story-geth, consensus: story) with Cosmovisor-based management."
+sidebarTitle: "Installation"
 ---
 
-Recommended Hardware: 8 Cores, 32GB RAM, 400GB of storage (NVME), 100 Mb/s
+## System requirements (official)
 
-### Install dependencies, if needed
+| Component | Recommended (Mainnet) |
+| --------- | --------------------- |
+| CPU       | Dedicated **8 cores** |
+| RAM       | **32 GB**             |
+| Disk      | **500 GB NVMe**       |
+| Bandwidth | **25 MBit/s**         |
 
-```shellscript
-sudo apt update && sudo apt upgrade -y
-sudo apt install curl git wget htop tmux build-essential jq make lz4 gcc unzip -y
-```
+<Steps>
+  <Step title="System prep">
+    - Ubuntu 22.04 LTS
+    - Open ports: **30303** (Geth P2P), **8545/8546** (JSON-RPC/WS, optional), **26656/26657** (consensus P2P/RPC), **26660** (Prometheus)
 
-### Install go, if needed
+    ```bash
+    sudo apt update && sudo apt install -y curl git unzip wget jq make build-essential lz4
+    ```
+  </Step>
+  <Step title="Install story-geth (execution)">
+    ```bash
+    # Download latest mainnet binary
+    cd $HOME
+    curl -L -o story-geth https://github.com/piplabs/story-geth/releases/latest/download/geth-linux-amd64
+    chmod +x story-geth && sudo mv story-geth /usr/local/bin/story-geth
+    
+    # Verify
+    story-geth version
+    ```
+  </Step>
+  <Step title="Install story (consensus) + Cosmovisor">
+    ```bash
+    # Cosmovisor
+    go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.6.0
+    cosmovisor version
+    
+    # Download latest story binary
+    cd $HOME
+    curl -L -o story https://github.com/piplabs/story/releases/latest/download/story-linux-amd64
+    chmod +x story && sudo mv story /usr/local/bin/story
+    story version
+    ```
+  </Step>
+  <Step title="Initialize node data">
+    ```bash
+    # Initialize consensus store for mainnet
+    cosmovisor init $(which story)
+    cosmovisor run init --network story --moniker "$HOSTNAME"
+    ```
+  </Step>
+  <Step title="Create services">
+    ```bash
+    # story-geth
+    sudo tee /etc/systemd/system/story-geth.service > /dev/null <<EOF
+    [Unit]
+    Description=Story Geth (execution) — Mainnet
+    After=network-online.target
+    [Service]
+    User=${USER}
+    ExecStart=/usr/local/bin/story-geth --story --syncmode full
+    Restart=on-failure
+    RestartSec=5
+    LimitNOFILE=65535
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+    
+    # story via Cosmovisor
+    sudo tee /etc/systemd/system/story.service > /dev/null <<EOF
+    [Unit]
+    Description=Story (consensus) via Cosmovisor — Mainnet
+    After=network-online.target
+    [Service]
+    Type=simple
+    User=${USER}
+    ExecStart=$(which cosmovisor) run run --api-enable --api-address=0.0.0.0:1317
+    Restart=on-failure
+    RestartSec=5s
+    LimitNOFILE=65535
+    Environment="DAEMON_NAME=story"
+    Environment="DAEMON_HOME=$HOME/.story/story"
+    Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=false"
+    Environment="DAEMON_RESTART_AFTER_UPGRADE=true"
+    Environment="DAEMON_DATA_BACKUP_DIR=$HOME/.story/story/cosmovisor/backup"
+    WorkingDirectory=$HOME/.story/story
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+    
+    sudo systemctl daemon-reload
+    sudo systemctl enable story-geth story
+    sudo systemctl start story-geth story
+    journalctl -u story -f -o cat
+    ```
+  </Step>
+  <Step title="Verify">
+    ```bash
+    # Execution (JSON-RPC): latest block
+    curl -s -X POST -H "Content-Type: application/json"       --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'       http://localhost:8545
+    
+    # Consensus (Tendermint RPC): status & peers
+    curl -s localhost:26657/status | jq
+    curl -s localhost:26657/net_info | jq '.result.peers[].node_info.moniker'
+    ```
+  </Step>
+</Steps>
 
-```shellscript
-cd $HOME
-VER="1.22.5"
-wget "https://golang.org/dl/go$VER.linux-amd64.tar.gz"
-sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf "go$VER.linux-amd64.tar.gz"
-rm "go$VER.linux-amd64.tar.gz"
-[ ! -f ~/.bash_profile ] && touch ~/.bash_profile
-echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bash_profile
-source $HOME/.bash_profile
-[ ! -d ~/go/bin ] && mkdir -p ~/go/bin
-```
-
-### Set vars
-
-```shellscript
-echo "export MONIKER="test"" >> $HOME/.bash_profile
-echo "export STORY_CHAIN_ID="story"" >> $HOME/.bash_profile
-echo "export STORY_PORT="45"" >> $HOME/.bash_profile
-source $HOME/.bash_profile
-```
-
-### Download binaries
-
-```shellscript
-cd $HOME
-rm -rf story-geth
-wget -O story-geth https://github.com/piplabs/story-geth/releases/download/v1.1.2/geth-linux-amd64
-chmod +x $HOME/story-geth
-mv $HOME/story-geth $HOME/go/bin/
-[ ! -d "$HOME/.story/story" ] && mkdir -p "$HOME/.story/story"
-[ ! -d "$HOME/.story/geth" ] && mkdir -p "$HOME/.story/geth"
-```
-
-### Install Story
-
-```shellscript
-cd $HOME
-rm -rf story
-git clone https://github.com/piplabs/story
-cd story
-git checkout v1.3.2
-go build -o story ./client 
-mv $HOME/story/story $HOME/go/bin/
-```
-
-### Init story app
-
-```shellscript
-story init --moniker $MONIKER --network $STORY_CHAIN_ID
-```
-
-### Set seeds and peers
-
-```shellscript
-SEEDS="8db87ee67cdf4c098d023e8f96d6156f098f0ae1@story-mainnet-seed.itrocket.net:45656"
-PEERS="ef8d211e08ca33193c2dff535ec5a29902e2b3f4@story-mainnet-peer.itrocket.net:45656,607f17f8be461d5b204361df8d18a06d2c7b66c9@160.202.131.55:26656,249de5c0085eb175da6ad7031f96bfc3ad751e33@79.137.98.193:26656,f8eeca47cb53dc205d38097263d5d856250f6c62@79.127.227.195:59456,22684dfc5f64dc355a1c68d0e4f7472d208caef9@95.216.243.177:26656,00c352502067a0fe98d58fc06248ff6b93bb3ce8@57.129.86.7:26656,4761ef729f12b80b3652edd26bd45734b5ff4515@51.15.15.160:26656,9502b8634fdafa3193ad97921ebd65b0af602276@91.210.101.131:26656,d76ffa2efbdbc07ab9085979895d164d000f876b@15.235.50.120:20038,994fb7310f08e2c3b75e953031f0fedca0c5a0bc@74.118.140.190:26656,e4656f3eea64c17c216f8a88501d8b277081c49d@168.119.10.134:26656,a2a794dc81a98e47366ab3fa3b5f5663388b371e@188.40.102.137:58656"
-sed -i -e "/^\[p2p\]/,/^\[/{s/^[[:space:]]*seeds *=.*/seeds = \"$SEEDS\"/}" \
-       -e "/^\[p2p\]/,/^\[/{s/^[[:space:]]*persistent_peers *=.*/persistent_peers = \"$PEERS\"/}" $HOME/.story/story/config/config.toml
-```
-
-### Set custom ports in story.toml file
-
-```shellscript
-sed -i.bak -e "s%:1317%:${STORY_PORT}317%g;
-s%:8551%:${STORY_PORT}551%g" $HOME/.story/story/config/story.toml
-```
-
-### Set custom ports in config.toml file
-
-```shellscript
-sed -i.bak -e "s%:26658%:${STORY_PORT}658%g;
-s%:26657%:${STORY_PORT}657%g;
-s%:26656%:${STORY_PORT}656%g;
-s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${STORY_PORT}656\"%;
-s%:26660%:${STORY_PORT}660%g" $HOME/.story/story/config/config.toml
-```
-
-### Enable prometheus and disable indexing
-
-```shellscript
-sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.story/story/config/config.toml
-sed -i -e "s/^indexer *=.*/indexer = \"null\"/" $HOME/.story/story/config/config.toml
-```
-
-### Create geth servie file
-
-```shellscript
-sudo tee /etc/systemd/system/story-geth.service > /dev/null <<EOF
-[Unit]
-Description=Story Geth daemon
-After=network-online.target
-
-[Service]
-User=$USER
-ExecStart=$(which story-geth) --story --syncmode full \
---http --http.api eth,net,web3,engine --http.vhosts '*' \
---http.addr 0.0.0.0 --http.port ${STORY_PORT}545 \
---authrpc.port ${STORY_PORT}551 \
---ws --ws.api eth,web3,net,txpool \
---ws.addr 0.0.0.0 --ws.port ${STORY_PORT}546 \
---port ${STORY_PORT}303
-Restart=on-failure
-RestartSec=3
-LimitNOFILE=65535
-
-[Install]
-WantedBy=multi-user.target
-EOF
-```
-
-### Create story service file
-
-```shellscript
-sudo tee /etc/systemd/system/story.service > /dev/null <<EOF
-[Unit]
-Description=Story Service
-After=network.target
-
-[Service]
-User=$USER
-WorkingDirectory=$HOME/.story/story
-ExecStart=$(which story) run
-
-Restart=on-failure
-RestartSec=5
-LimitNOFILE=65535
-[Install]
-WantedBy=multi-user.target
-EOF
-```
-
-### Download snapshots
-
-backup priv_validator_state.json
-
-```shellscript
-cp $HOME/.story/story/data/priv_validator_state.json $HOME/.story/story/priv_validator_state.json.backup
-```
-
-### Remove old data and unpack Story snapshot
-
-```shellscript
-rm -rf $HOME/.story/story/data
-curl https://server-2.itrocket.net/mainnet/story/story_2025-10-11_9578376_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/story
-```
-
-### Restore priv_validator_state.json
-
-```shellscript
-mv $HOME/.story/story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
-```
-
-### Delete geth data and unpack Geth snapshot
-
-```shellscript
-rm -rf $HOME/.story/geth/story/geth/chaindata
-mkdir -p $HOME/.story/geth/story/geth
-curl https://server-2.itrocket.net/mainnet/story/geth_story_2025-10-11_9578376_snap.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.story/geth/story/geth
-```
-
-### Enable and start geth, story
-
-```shellscript
-sudo systemctl daemon-reload
-sudo systemctl enable story story-geth
-sudo systemctl restart story-geth && sleep 5 && sudo systemctl restart story
-```
-
-### Check logs
-
-```shellscript
-journalctl -u story -u story-geth -f
-```
+<Note>
+  For versions and release notes, always consult the official **Story** release pages before installing/upgrading.
+</Note>

@@ -1,4 +1,116 @@
 ---
-title: "Installation Guide"
-description: "Description of your new file."
+title: "Installation"
+description: "Set up a Story Aeneid testnet full node (execution: story-geth with --aeneid, consensus: story --network aeneid)."
+sidebarTitle: "Installation"
 ---
+
+## System requirements (baseline)
+
+Use the **same baseline** as mainnet for best compatibility:
+
+| Component | Recommended (Aeneid baseline) |
+| --------- | ----------------------------- |
+| CPU       | Dedicated **8 cores**         |
+| RAM       | **32 GB**                     |
+| Disk      | **500 GB NVMe**               |
+| Bandwidth | **25 MBit/s**                 |
+
+<Note>
+  Resource usage on testnet can be lower, but keeping mainnet-class specs avoids sync issues and reorg sensitivity during testnet events.
+</Note>
+
+<Steps>
+  <Step title="System prep">
+    - Ubuntu 22.04 LTS
+    - Open ports: **30303** (Geth P2P), **8545/8546** (JSON-RPC/WS, optional), **26656/26657** (consensus P2P/RPC), **26660** (Prometheus)
+
+    ```bash
+    sudo apt update && sudo apt install -y curl git unzip wget jq make build-essential lz4
+    ```
+  </Step>
+  <Step title="Install story-geth (execution) for Aeneid">
+    ```bash
+    cd $HOME
+    curl -L -o story-geth https://github.com/piplabs/story-geth/releases/latest/download/geth-linux-amd64
+    chmod +x story-geth && sudo mv story-geth /usr/local/bin/story-geth
+    story-geth version
+    ```
+  </Step>
+  <Step title="Install story (consensus) + Cosmovisor">
+    ```bash
+    go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.6.0
+    cosmovisor version
+    
+    cd $HOME
+    curl -L -o story https://github.com/piplabs/story/releases/latest/download/story-linux-amd64
+    chmod +x story && sudo mv story /usr/local/bin/story
+    story version
+    ```
+  </Step>
+  <Step title="Initialize node data for Aeneid">
+    ```bash
+    # Consensus store
+    cosmovisor init $(which story)
+    cosmovisor run init --network aeneid --moniker "$HOSTNAME"
+    ```
+  </Step>
+  <Step title="Create services (Aeneid)">
+    ```bash
+    # story-geth (Aeneid)
+    sudo tee /etc/systemd/system/story-geth.service > /dev/null <<EOF
+    [Unit]
+    Description=Story Geth (execution) — Aeneid Testnet
+    After=network-online.target
+    [Service]
+    User=${USER}
+    ExecStart=/usr/local/bin/story-geth --aeneid --syncmode full
+    Restart=on-failure
+    RestartSec=5
+    LimitNOFILE=65535
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+    
+    # story via Cosmovisor (Aeneid)
+    sudo tee /etc/systemd/system/story.service > /dev/null <<EOF
+    [Unit]
+    Description=Story (consensus) via Cosmovisor — Aeneid
+    After=network-online.target
+    [Service]
+    Type=simple
+    User=${USER}
+    ExecStart=$(which cosmovisor) run run --api-enable --api-address=0.0.0.0:1317
+    Restart=on-failure
+    RestartSec=5s
+    LimitNOFILE=65535
+    Environment="DAEMON_NAME=story"
+    Environment="DAEMON_HOME=$HOME/.story/story"
+    Environment="DAEMON_ALLOW_DOWNLOAD_BINARIES=false"
+    Environment="DAEMON_RESTART_AFTER_UPGRADE=true"
+    Environment="DAEMON_DATA_BACKUP_DIR=$HOME/.story/story/cosmovisor/backup"
+    WorkingDirectory=$HOME/.story/story
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+    
+    sudo systemctl daemon-reload
+    sudo systemctl enable story-geth story
+    sudo systemctl start story-geth story
+    journalctl -u story -f -o cat
+    ```
+  </Step>
+  <Step title="Verify">
+    ```bash
+    # Execution
+    curl -s -X POST -H "Content-Type: application/json"       --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'       http://localhost:8545
+    
+    # Consensus
+    curl -s localhost:26657/status | jq
+    curl -s localhost:26657/net_info | jq '.result.peers[].node_info.moniker'
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  Use separate data directories/wallets between mainnet and Aeneid. The `--aeneid` flag reconfigures **story-geth** to the testnet with different bootnodes and network IDs.
+</Note>
