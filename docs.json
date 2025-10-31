@@ -23,6 +23,16 @@
             ]
           },
           {
+            "group": "Dashboard",
+            "pages": [
+              "dashboard/validators",
+              "dashboard/weekly-status",
+              "dashboard/decentralization",
+              "dashboard/bridge-nodes",
+              "dashboard/missed-proposals"
+            ]
+          },
+          {
             "group": "Networks",
             "pages": [
               {

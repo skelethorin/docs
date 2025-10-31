@@ -1,0 +1,37 @@
+---
+title: "Snapshots"
+description: "Hourly Archive and Pruned snapshots with copy‑paste installation commands for fast node bootstrapping."
+sidebarTitle: "Snapshots"
+---
+
+The **Snapshots** page hosts ready‑to‑use **Archive** and **Pruned** snapshots for supported networks. Each entry shows block height, file sizes, DB backend, and client versions.
+
+![Snapshots Pn](/images/snapshots.png)
+
+## Archive vs Pruned
+
+- **Archive**: Retains full historical state. Heavier disk usage; best for research and full indexing.
+- **Pruned**: Keeps recent state with historical pruning. Significantly smaller; ideal for production nodes when full history isn’t required.
+
+## Update cadence
+
+- Snapshots are generated **hourly**. The page shows the **last updated time**, current **block**, and **file sizes**.
+
+## Quick restore
+
+Use the inline command block under each snapshot entry. Typical (example) pattern for compressed tarballs:
+
+```bash
+# Stop services and back up sensitive files (e.g., priv_validator_state.json on CometBFT-based chains)
+sudo systemctl stop <service>
+
+# Restore (example; adjust URL and paths)
+curl -L <SNAPSHOT_URL> | lz4 -dc - | tar -xf - -C <DATA_DIR>
+
+# Restart and follow logs
+sudo systemctl restart <service> && journalctl -u <service> -f -o cat
+```
+
+<Note>
+  Always back up **priv_validator_state.json** before restoring a snapshot to avoid double‑sign scenarios on consensus‑based chains.
+</Note>

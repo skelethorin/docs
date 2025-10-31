@@ -1,0 +1,44 @@
+---
+title: "Validators"
+description: "Network-wide validator analytics: KPIs, distribution, and a sortable table for deep inspection across supported networks (Celestia, Story, Sunrise)."
+sidebarTitle: "Validators"
+---
+
+The **Validators** page provides a real-time overview of validator health, participation, and stake distribution. It combines high-level KPIs with an interactive table so you can quickly pivot from macro trends to specific operators.
+
+![Validators Pn](/images/validators.png)
+
+## Key KPIs
+
+- **Active Validators / Inactive Validators** — Count of validators currently in the active set versus those outside the set. Useful for tracking churn and network participation.
+- **APR** — Network staking Annual Percentage Rate before validator commission. Values can vary by era/epoch and network economics.
+- **Min Stake** — The smallest effective stake among validators in the **active** set. Indicates the current threshold to enter/maintain active status.
+- **Avg. Commission** — Mean commission rate of the active set. Helps estimate post‑commission yield.
+- **Block Time (Avg)** — Rolling average of block intervals. Spikes often correlate with network congestion or proposer round retries.
+- **Bonded Tokens** — Total staked tokens securing the network.
+- **Total Delegators** — Count of unique delegator accounts across validators.
+
+**Time windows:** Top charts support **7D / 1M / 3M / All** to analyze short‑term vs long‑term trends for **Block Time**, **Bonded Tokens**, and **Total Delegators**.
+
+## Validators Table
+
+Sortable & searchable table with the following columns:
+
+- **Moniker** — Validator display name.
+- **Voting Power** — Effective stake. Sort to inspect concentration.
+- **Cumulative Share** — Cumulative distribution curve position. Reveals how quickly stake concentrates.
+- **Delegators** — Number of delegators bonded to the validator.
+- **Uptime** — Observed signing participation over the selected window.
+- **Commission** — Validator fee charged on rewards.
+
+### Usage Scenarios
+
+- **Find concentration risk:** Sort by **Voting Power** and read the **Cumulative Share** to detect the top X validators holding a majority of stake.
+- **New delegator discovery:** Filter by **Commission** and **Uptime** to shortlist operators.
+- **Trend audit:** Track **Block Time (Avg)** and **Bonded Tokens** together to correlate performance with staking behavior.
+
+### Tips
+
+- Use the search box to find a moniker or operator address.
+- Combine column sorting with the top KPI charts’ time window for context.
+- Click any validator row to open a detailed view (where supported by the network).

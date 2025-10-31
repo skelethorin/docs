@@ -1,0 +1,32 @@
+---
+title: "Decentralization"
+description: "Geographic and provider distribution of nodes/validators with a 2-hour refresh cadence. Investigate concentration risks quickly."
+sidebarTitle: "Decentralization"
+---
+
+The **Decentralization** page maps nodes/validators globally, surfacing geographic and provider concentration.
+
+![Decentralization1 Pn](/images/decentralization1.png)
+
+## What you see
+
+- **Map view** with pins per node/validator. Popovers include **moniker**, **provider**, **location**, and (when available) **IP**.
+- **Stats**: **Total Nodes**, **Countries**, **Providers**.
+- **Charts**:
+  - **Nodes by Country** — Which jurisdictions host the most nodes.
+  - **Nodes by Provider** — Cloud/DC concentration.
+- **Node List** table with **Moniker**, **Region**, **Country**, **City**, **Provider** and filters.
+
+![Decentralization2 Pn](/images/decentralization2.png)
+
+## Why decentralization matters
+
+- **Jurisdictional risk**: Excess concentration in a single country increases correlated regulatory or outage risk.
+- **Single‑provider risk**: Heavy reliance on one provider (e.g., a large cloud) creates common‑mode failure exposure.
+- **Routing & latency**: Global spread can improve propagation and proposer timing stability.
+
+## Practical analysis
+
+- Filter by **provider** to check for outsized dependence (e.g., a single hyperscaler).
+- Inspect **country** distribution before onboarding more validators or recommending infra choices to delegators.
+- Use the table to verify operator diversity (regional mix, providers, and cities).
