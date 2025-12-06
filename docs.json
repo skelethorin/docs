@@ -171,6 +171,13 @@
                     ]
                   }
                 ]
+              },
+                            {
+                "group": "IOTA",
+                "icon": "https://cloudflare-snapshots.krews.xyz/%C4%B1ota.png",
+                "pages": [
+                  "networks/iota"
+                ]
               }
             ]
           },
