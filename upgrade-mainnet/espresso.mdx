@@ -1,27 +1,75 @@
 ---
-title: "Upgrade"
-description: "Upgrade the Espresso sequencer node by pulling a new image tag and restarting with persisted keys."
-sidebarTitle: "Upgrade"
+title: "Upgrade" description: "Safe upgrade procedure for Espresso sequencer nodes on the Decaf testnet. Covers image tags, backups, health checks, and rollback."
 ---
 
+<Steps>
+  <Step title="Review release notes & confirm target image">
+    Open the Decaf **release** page and note the latest **Docker image tag** for the sequencer. For example, the current tag is:
+
+    ```bash
+    ghcr.io/espressosystems/espresso-sequencer/sequencer:20251106-patch1
+    ```
+
+    Also check for any changes to **endpoints**, **genesis file**, or **staking rules**.
+  </Step>
+  <Step title="Backup data & keys">
+    Back up your mounted directories (adjust paths if different):
+
+    ```bash
+    sudo systemctl stop docker || true
+    # or just stop the container:
+    docker stop espresso-sequencer || true
+    
+    # back up sqlite store (non-DA) or any local data
+    rsync -aH /opt/espresso/store/ /opt/espresso/backup/store-$(date +%F)/
+    
+    # back up key material
+    rsync -aH /opt/espresso/keys/ /opt/espresso/backup/keys-$(date +%F)/
+    ```
+
+    If you operate a **DA node**, back up your **PostgreSQL** database per your DB’s backup procedure.
+  </Step>
+  <Step title="Pull new images">
+    ```bash
+    export NEW_TAG="20251106-patch1"   # replace with the tag from release notes
+    docker pull ghcr.io/espressosystems/espresso-sequencer/sequencer:${NEW_TAG}
+    docker pull ghcr.io/espressosystems/espresso-sequencer/staking-cli:main
+    ```
+  </Step>
+  <Step title="Update environment & restart">
+    Confirm your environment is still valid for **Decaf** (notably, the **genesis file** and **endpoints**):
+
+    ```bash
+    export ESPRESSO_SEQUENCER_GENESIS_FILE="/genesis/decaf.toml"
+    export ESPRESSO_SEQUENCER_CONFIG_PEERS="https://cache.decaf.testnet.espresso.network"
+    export ESPRESSO_SEQUENCER_ORCHESTRATOR_URL="https://orchestrator-UZAFTUIMZOT.decaf.testnet.espresso.network/"
+    export ESPRESSO_SEQUENCER_CDN_ENDPOINT="cdn.decaf.testnet.espresso.network:1737"
+    export ESPRESSO_STATE_RELAY_SERVER_URL="https://state-relay.decaf.testnet.espresso.network"
+    ```
+
+    Then restart the container using the **new tag**:
+
+    ```bash
+    docker rm -f espresso-sequencer || true
+    docker run -d --name espresso-sequencer --restart unless-stopped       -v /opt/espresso/store:/mount/sequencer/store       -v /opt/espresso/keys:/mount/sequencer/keys:ro       -e ESPRESSO_SEQUENCER_L1_PROVIDER -e ESPRESSO_SEQUENCER_L1_WS_PROVIDER       -e ESPRESSO_SEQUENCER_CONFIG_PEERS -e ESPRESSO_SEQUENCER_ORCHESTRATOR_URL       -e ESPRESSO_SEQUENCER_CDN_ENDPOINT -e ESPRESSO_STATE_RELAY_SERVER_URL       -e ESPRESSO_SEQUENCER_GENESIS_FILE       ghcr.io/espressosystems/espresso-sequencer/sequencer:${NEW_TAG}         sequencer -- http -- catchup -- status
+    ```
+  </Step>
+  <Step title="Validate the upgrade">
+    - Watch logs: `docker logs -f espresso-sequencer` and ensure the node **joins** and **syncs**.
+    - Confirm **/status** and/or metrics are exposed on your configured API port.
+    - Check **libp2p** connectivity (UDP port reachable, peers listed).
+  </Step>
+  <Step title="Rollback (if needed)">
+    ```bash
+    export PREV_TAG="202510XX-some-previous"  # your last known good tag
+    docker rm -f espresso-sequencer || true
+    docker run -d --name espresso-sequencer       -v /opt/espresso/store:/mount/sequencer/store       -v /opt/espresso/keys:/mount/sequencer/keys:ro       ghcr.io/espressosystems/espresso-sequencer/sequencer:${PREV_TAG}         sequencer -- http -- catchup -- status
+    ```
+
+    Restore from your **store/** and **keys/** backups if corruption is suspected.
+  </Step>
+</Steps>
+
 <Note>
-  During **Mainnet 0**, only pre-registered operators can join consensus. Keys should be persisted on the host.
+  _Supported networks:_ **Espresso Decaf testnet**.
 </Note>
-
-## Pull new image & restart
-
-```bash
-# Stop existing container
-docker stop espresso-sequencer && docker rm espresso-sequencer
-
-# Pull the target tag (replace :main with the announced tag)
-docker pull ghcr.io/espressosystems/espresso-sequencer/sequencer:main
-
-# Restart with your existing volumes/env
-docker run -d --name espresso-sequencer   -v ~/espresso/keys:/keys   -e ESPRESSO_SEQUENCER_KEY_FILE=/keys/0.env   -p 3700:3700   ghcr.io/espressosystems/espresso-sequencer/sequencer:main   sequencer -- http -- config
-```
-
-## Verify
-
-- Status endpoint if enabled (e.g., `/status/metrics`).
-- Confirm peer count and consensus view in logs/metrics.
