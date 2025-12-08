@@ -1,51 +1,100 @@
 ---
 title: "Installation"
-description: "Run an Espresso sequencer node (a.k.a. Espresso node). Mainnet-0 is permissioned; testnets are open—follow the required environment values."
+description: "Install and run an Espresso sequencer node on the Decaf testnet using Docker. Includes hardware requirements, environment variables, and optional staking registration/delegation on Ethereum Sepolia."
 ---
 
 <Note>
-  Espresso’s “sequencer node” ships as a Rust binary and Docker image. For **Mainnet 0**, only pre-registered operators can run. For testnets, you can run openly with the correct configuration (L1 RPC, orchestrator URL, CDN endpoint, state relay server, genesis, peers).
+  Decaf is a **testnet**. Operator access may be **limited**; see Espresso’s announcement and contact form for inclusion. Staking on Decaf uses **Ethereum Sepolia** and the **Decaf stake table**.
 </Note>
 
-## Prerequisites
+## Requirements
 
-- Linux with **Docker** (or a recent Rust toolchain if building from source).
-- Access to an **Ethereum JSON-RPC** endpoint for the configured L1.
+| Node type       | CPU     | RAM  | Storage     | Notes                                |
+| --------------- | ------: | ---: | ----------: | ------------------------------------ |
+| Non‑DA node     | 1 core  | 2 GB | negligible  | Suitable for observation and testing |
+| DA / Sequencer  | 4 cores | 8 GB | 1.2 TB SSD+ | Requires PostgreSQL for SQL storage  |
+| PostgreSQL (DA) | 2 cores | 4 GB | ~100 GB+    | Size grows with chain history        |
 
-## 1) Docker (recommended)
+<Steps>
+  <Step title="Prepare the host">
+    Ensure **Docker** is installed and your firewall allows the advertised **libp2p UDP port** you will configure.\
+    Create directories for persistent data and keys:
 
-```bash
-# Replace <...> with real values
-docker run -it --name espresso-sequencer   -e ESPRESSO_SEQUENCER_L1_PROVIDER=<http://your-l1:8545>   -e ESPRESSO_SEQUENCER_ORCHESTRATOR_URL=<https://orchestrator.yournet>   -e ESPRESSO_SEQUENCER_CDN_ENDPOINT=<cdn.host:port>   -e ESPRESSO_STATE_RELAY_SERVER_URL=<https://state-relay.yournet>   -e ESPRESSO_SEQUENCER_STATE_PEERS=<peer1,peer2,...>   -e ESPRESSO_SEQUENCER_GENESIS_FILE=/etc/espresso/genesis.toml   -e ESPRESSO_SEQUENCER_LIBP2P_BIND_ADDRESS=0.0.0.0:9000   -e ESPRESSO_SEQUENCER_LIBP2P_ADVERTISE_ADDRESS=<public.ip>:9000   -v $(pwd)/genesis.toml:/etc/espresso/genesis.toml   ghcr.io/espressosystems/espresso-sequencer/sequencer:main   sequencer -- status --http 0.0.0.0:4000 -- query
-```
+    ```bash
+    mkdir -p /opt/espresso/{store,keys}
+    chmod 700 /opt/espresso/keys
+    ```
+  </Step>
+  <Step title="Provide keys">
+    You can pass keys either via a single **key file** or via two environment variables.
 
-The image also supports a `keygen` helper to produce keys inside a container volume; see the docs.
+    - Key file path inside the container: `/mount/sequencer/keys/0.env`
+    - Or set:
+      - `ESPRESSO_SEQUENCER_PRIVATE_STAKING_KEY="BLS_SIGNING_KEY~..."`
+      - `ESPRESSO_SEQUENCER_PRIVATE_STATE_KEY="SCHNORR_SIGNING_KEY~..."`
+  </Step>
+  <Step title="Set Decaf environment">
+    Export environment variables (edit values as needed). The Docker image tag below is the current Decaf release.
 
-## 2) From source (alternative)
+    ```bash
+    export IMAGE_TAG="20251106-patch1" # Decaf image tag
+    export L1_HTTP="https://sepolia.infura.io/v3/<API_KEY>"          # Ethereum Sepolia HTTP
+    export L1_WS="wss://sepolia.infura.io/v3/<API_KEY>"              # Ethereum Sepolia WS (recommended)
+    export API_PORT="8080"                                           # Sequencer API/metrics
+    export LIBP2P_BIND="0.0.0.0:18000/udp"                           # Bind address (UDP)
+    export LIBP2P_ADVERTISE="<PUBLIC_IP_OR_DNS>:18000/udp"           # Publicly reachable address
+    
+    # Decaf bootstrap/config + core services
+    export ESPRESSO_SEQUENCER_CONFIG_PEERS="https://cache.decaf.testnet.espresso.network"
+    export ESPRESSO_SEQUENCER_ORCHESTRATOR_URL="https://orchestrator-UZAFTUIMZOT.decaf.testnet.espresso.network/"
+    export ESPRESSO_SEQUENCER_CDN_ENDPOINT="cdn.decaf.testnet.espresso.network:1737"
+    export ESPRESSO_STATE_RELAY_SERVER_URL="https://state-relay.decaf.testnet.espresso.network"
+    export ESPRESSO_SEQUENCER_GENESIS_FILE="/genesis/decaf.toml"
+    
+    # Paths inside the container
+    export ESPRESSO_SEQUENCER_STORAGE_PATH="/mount/sequencer/store/"
+    export ESPRESSO_SEQUENCER_KEY_FILE="/mount/sequencer/keys/0.env"
+    
+    # Optional: identify your node in Espresso’s node dashboard
+    export ESPRESSO_SEQUENCER_IDENTITY_NODE_NAME="espresso-sequencer-01"
+    export ESPRESSO_SEQUENCER_IDENTITY_COMPANY_NAME="YourOrg"
+    export ESPRESSO_SEQUENCER_IDENTITY_COMPANY_WEBSITE="https://your.org"
+    export ESPRESSO_SEQUENCER_IDENTITY_OPERATING_SYSTEM="$(uname -sr)"
+    export ESPRESSO_SEQUENCER_IDENTITY_NETWORK_TYPE="Hosted"         # Residential | Hosted | AWS | GCP | Azure
+    export ESPRESSO_SEQUENCER_IDENTITY_COUNTRY_CODE="TR"             # ISO-3166 Alpha-2
+    ```
+  </Step>
+  <Step title="Run a Regular (non‑DA) node">
+    ```bash
+    docker run -d --name espresso-sequencer --restart unless-stopped       -p "${API_PORT}:${API_PORT}"       -v /opt/espresso/store:/mount/sequencer/store       -v /opt/espresso/keys:/mount/sequencer/keys:ro       -e ESPRESSO_SEQUENCER_L1_PROVIDER="${L1_HTTP}"       -e ESPRESSO_SEQUENCER_L1_WS_PROVIDER="${L1_WS}"       -e ESPRESSO_SEQUENCER_CONFIG_PEERS       -e ESPRESSO_SEQUENCER_ORCHESTRATOR_URL       -e ESPRESSO_SEQUENCER_CDN_ENDPOINT       -e ESPRESSO_STATE_RELAY_SERVER_URL       -e ESPRESSO_SEQUENCER_GENESIS_FILE       -e ESPRESSO_SEQUENCER_STORAGE_PATH       -e ESPRESSO_SEQUENCER_KEY_FILE       -e ESPRESSO_SEQUENCER_LIBP2P_BIND_ADDRESS="${LIBP2P_BIND}"       -e ESPRESSO_SEQUENCER_LIBP2P_ADVERTISE_ADDRESS="${LIBP2P_ADVERTISE}"       -e ESPRESSO_SEQUENCER_API_PORT="${API_PORT}"       -e ESPRESSO_SEQUENCER_IDENTITY_NODE_NAME       -e ESPRESSO_SEQUENCER_IDENTITY_COMPANY_NAME       -e ESPRESSO_SEQUENCER_IDENTITY_COMPANY_WEBSITE       -e ESPRESSO_SEQUENCER_IDENTITY_OPERATING_SYSTEM       -e ESPRESSO_SEQUENCER_IDENTITY_NETWORK_TYPE       -e ESPRESSO_SEQUENCER_IDENTITY_COUNTRY_CODE       ghcr.io/espressosystems/espresso-sequencer/sequencer:${IMAGE_TAG}         sequencer -- http -- catchup -- status
+    ```
+  </Step>
+  <Step title="Run a DA (sequencer) node with PostgreSQL">
+    Requires a reachable PostgreSQL instance and extra storage.
 
-```bash
-git clone https://github.com/EspressoSystems/espresso-sequencer.git
-cd espresso-sequencer
-cargo build --release
-# binary at target/release/sequencer
-```
+    ```bash
+    docker run -d --name espresso-sequencer-da --restart unless-stopped       -p "${API_PORT}:${API_PORT}"       -v /opt/espresso/keys:/mount/sequencer/keys:ro       -e ESPRESSO_SEQUENCER_L1_PROVIDER="${L1_HTTP}"       -e ESPRESSO_SEQUENCER_L1_WS_PROVIDER="${L1_WS}"       -e ESPRESSO_SEQUENCER_CONFIG_PEERS       -e ESPRESSO_SEQUENCER_ORCHESTRATOR_URL       -e ESPRESSO_SEQUENCER_CDN_ENDPOINT       -e ESPRESSO_STATE_RELAY_SERVER_URL       -e ESPRESSO_SEQUENCER_GENESIS_FILE       -e ESPRESSO_SEQUENCER_KEY_FILE       -e ESPRESSO_SEQUENCER_API_PORT="${API_PORT}"       # add your Postgres connection env (e.g., DATABASE_URL) as required by your setup       ghcr.io/espressosystems/espresso-sequencer/sequencer:${IMAGE_TAG}         sequencer -- storage-sql -- http -- catchup -- status -- query
+    ```
+  </Step>
+  <Step title="(Optional) Register & delegate on Sepolia">
+    Register the node once to enter the staking set; then delegate to activate.
 
-## 3) Choose a network
+    ```bash
+    # Register
+    docker run -e L1_PROVIDER="${L1_HTTP}"       -e STAKE_TABLE_ADDRESS="0x40304fbe94d5e7d1492dd90c53a2d63e8506a037"       -e MNEMONIC -e ACCOUNT_INDEX       -e CONSENSUS_PRIVATE_KEY -e STATE_PRIVATE_KEY       ghcr.io/espressosystems/espresso-sequencer/staking-cli:main         staking-cli register-validator --commission 0.10
+    
+    # Delegate (bootstrap your own validator or from another account)
+    docker run -e L1_PROVIDER="${L1_HTTP}"       -e STAKE_TABLE_ADDRESS="0x40304fbe94d5e7d1492dd90c53a2d63e8506a037"       -e MNEMONIC -e ACCOUNT_INDEX       ghcr.io/espressosystems/espresso-sequencer/staking-cli:main         delegate --validator-address $ADDRESS --amount $DELEGATION_AMOUNT
+    ```
+  </Step>
+  <Step title="Health checks & networking tips">
+    - Verify logs: `docker logs -f espresso-sequencer`
+    - Ensure the **UDP** libp2p port is open from the Internet to your host.
+    - The first start needs `ESPRESSO_SEQUENCER_CONFIG_PEERS`. Subsequent restarts should reuse cached config.
+    - Apply **TCP optimizations** per Espresso docs (sysctl or Docker flags).
+  </Step>
+</Steps>
 
-- **Mainnet 0**: permissioned; endpoints are provided directly by Espresso.
-- **Mainnet 1 / Testnets**: obtain the correct **genesis** and **peer/orchestrator** values from the releases or testnet pages, then set the corresponding environment variables.
-
-## 4) Verify
-
-Start the **status** API and check metrics:
-
-```bash
-# if run with -- status --http 0.0.0.0:4000
-curl -s localhost:4000/status | jq
-# Look for increasing consensus views and connected peers
-```
-
-## Notes
-
-- Modes supported: **lightweight**, **archival**, **DA** (pruning with Postgres). Enable the **query** module for archival/DA modes as documented.
-- Keep L1 and orchestrator endpoints stable; peers must be reachable over **libp2p**.
+<Note>
+  _Supported networks:_ **Espresso Decaf testnet**.
+</Note>
